@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: google_sheets # name of the source
     schema: google_sheets # this is the schema our raw data lives in
-    database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB" # this is the name of our database
+    database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE" # this is the name of our database
 
     quoting: # al estar todo en falso no es case_sensitive. Si se pone en true si lo será para cada campo
       database: false
