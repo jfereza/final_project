@@ -1,0 +1,27 @@
+
+version: 2
+
+models:
+  - name: stg_google_sheets__budget
+    description: >
+      blabla
+    columns:
+      - name: product_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: quantity
+        data_type: number
+        description: >
+          blabla
+
+      - name: month
+        data_type: number
+        description: >
+          blabla
+
+      - name: _fivetran_synced_utc
+        data_type: timestamp_tz
+        description: >
+          blabla

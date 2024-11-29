@@ -1,0 +1,527 @@
+version: 2
+
+models:
+  - name: base_sql_server_dbo__orders
+    description: >
+      blabla
+    columns:
+      - name: order_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: user_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: address_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: tracking_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: shipping_service
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: status
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: created_at_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+      - name: estimated_delivery_at_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+      - name: delivered_at_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+      - name: order_cost
+        data_type: float
+        description: >
+          blabla
+
+      - name: shipping_cost
+        data_type: float
+        description: >
+          blabla
+
+      - name: promo_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: order_total
+        data_type: float
+        description: >
+          blabla
+
+      - name: _fivetran_deleted
+        data_type: boolean
+        description: >
+          blabla
+
+      - name: _fivetran_synced_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+        
+  - name: stg_sql_server_dbo__addresses
+    description: >
+      blabla
+    columns:
+      - name: address_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: zipcode
+        data_type: number
+        description: >
+          blabla
+
+      - name: country
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: address
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: state
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: _fivetran_synced_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+  - name: stg_sql_server_dbo__event_types
+    description: >
+      blabla
+    columns:
+      - name: event_type
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: event_type_id
+        data_type: varchar
+        description: >
+          blabla
+
+  - name: stg_sql_server_dbo__events
+    description: >
+      blabla
+    columns:
+      - name: event_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: session_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: user_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: event_type_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: page_url
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: created_at_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+      - name: product_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: order_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: _fivetran_deleted
+        data_type: boolean
+        description: >
+          blabla
+
+      - name: _fivetran_synced_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+  - name: stg_sql_server_dbo__order_items
+    description: >
+      blabla
+    columns:
+      - name: order_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: product_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: quantity
+        data_type: number
+        description: >
+          blabla
+
+      - name: _fivetran_deleted
+        data_type: boolean
+        description: >
+          blabla
+
+      - name: _fivetran_synced_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+  - name: stg_sql_server_dbo__orders
+    description: >
+      blabla
+    columns:
+      - name: order_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: user_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: address_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: status_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: created_at_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+      - name: order_cost
+        data_type: float
+        description: >
+          blabla
+
+      - name: promo_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: order_total
+        data_type: float
+        description: >
+          blabla
+
+      - name: _fivetran_deleted
+        data_type: boolean
+        description: >
+          blabla
+
+      - name: _fivetran_synced_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+  - name: stg_sql_server_dbo__products
+    description: >
+      blabla
+    columns:
+      - name: product_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: price
+        data_type: float
+        description: >
+          blabla
+
+      - name: product_name
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: inventory
+        data_type: number
+        description: >
+          blabla
+
+      - name: _fivetran_deleted
+        data_type: boolean
+        description: >
+          blabla
+
+      - name: _fivetran_synced_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+  - name: stg_sql_server_dbo__shipping_info
+    description: >
+      blabla
+    columns:
+      - name: order_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: tracking_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: shipping_service_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: estimated_delivery_at_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+      - name: delivered_at_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+      - name: shipping_cost
+        data_type: float
+        description: >
+          blabla
+        
+  - name: stg_sql_server_dbo__shipping_service
+    description: >
+      blabla
+    columns:
+      - name: shipping_service
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: shipping_service_id
+        data_type: varchar
+        description: >
+          blabla
+          
+  - name: stg_sql_server_dbo__users
+    description: >
+      blabla
+    columns:
+      - name: user_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: address_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: first_name
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: last_name
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: email
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: phone_number
+        data_type: number
+        description: >
+          blabla
+
+      - name: created_at_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+      - name: updated_at_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+      - name: _fivetran_deleted
+        data_type: boolean
+        description: >
+          blabla
+
+      - name: _fivetran_synced_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
+
+  - name: stg_sql_server_dbo__actual_sales
+    description: >
+      blabla
+    columns:
+      - name: product_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: month
+        data_type: number
+        description: >
+          blabla
+
+      - name: quantity
+        data_type: number
+        description: >
+          blabla
+
+  - name: stg_sql_server_dbo__status
+    description: ""
+    columns:
+      - name: status_id
+        data_type: varchar
+        description: >
+          blablabla
+
+      - name: status
+        data_type: varchar
+        description: >
+          blablabla
+        
+  - name: stg_sql_server_dbo__time
+    description: >
+      blabla
+    columns:
+      - name: date
+        data_type: date
+        description: >
+          blabla
+
+      - name: year
+        data_type: number
+        description: >
+          blabla
+
+      - name: month
+        data_type: number
+        description: >
+          blabla
+
+      - name: month_name
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: day
+        data_type: number
+        description: >
+          blabla
+
+      - name: quarter
+        data_type: number
+        description: >
+          blabla
+
+      - name: day_of_week
+        data_type: number
+        description: >
+          blabla
+
+      - name: day_of_week_name
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: fiscal_quarter
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: week
+        data_type: number
+        description: >
+          blabla
+
+      - name: day_of_year
+        data_type: number
+        description: >
+          blabla
+
+  - name: stg_sql_server_dbo__promos
+    description: >
+      blabla
+    columns:
+      - name: promo_id
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: promo_desc
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: discount
+        data_type: number
+        description: >
+          blabla
+
+      - name: status
+        data_type: varchar
+        description: >
+          blabla
+
+      - name: _fivetran_deleted
+        data_type: boolean
+        description: >
+          blabla
+
+      - name: _fivetran_synced_utc
+        data_type: timestamp_tz
+        description: >
+          blabla
