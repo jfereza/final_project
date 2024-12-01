@@ -3,25 +3,46 @@ version: 2
 
 models:
   - name: stg_google_sheets__budget
+
     description: >
-      blabla
+          Budget for each product and month.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - product_id
+            - month
+    
     columns:
       - name: product_id
         data_type: varchar
         description: >
-          blabla
+          Unique identifier of each product.
+        tests:
+          - not_null
 
       - name: quantity
         data_type: number
         description: >
-          blabla
+          Number of products sold in a given month.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
 
       - name: month
         data_type: number
         description: >
-          blabla
+          Month in which the budget has been calculated.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
 
       - name: _fivetran_synced_utc
         data_type: timestamp_tz
         description: >
-          blabla
+          fivetran_synced in UTC
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
