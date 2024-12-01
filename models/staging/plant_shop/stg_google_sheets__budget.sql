@@ -10,7 +10,7 @@ renamed as (
 
     select
         product_id,
-        quantity,
+        ifnull(quantity,0) as quantity, -- si es nulo, lo cambiamos a 0
         month(month)::number as month,
         convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc,
     from source

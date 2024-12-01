@@ -1,0 +1,65 @@
+version: 2
+
+sources:
+  - name: google_sheets # name of the source
+    schema: google_sheets # this is the schema our raw data lives in
+    database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB" # this is the name of our database
+
+    quoting: # al estar todo en falso no es case_sensitive. Si se pone en true si lo será para cada campo
+      database: false
+      schema: false
+      identifier: false
+
+    freshness:
+      warn_after: { count: 24, period: hour }
+      error_after: { count: 48, period: hour }
+
+    tables:
+      - name: budget
+
+        loaded_at_field: _fivetran_synced
+        description: >
+          Budget for each product and month.
+
+        columns:
+          - name: _row
+            description: >
+              Number of each row from google sheet.
+            tests:
+              - not_null
+              - unique
+              - dbt_utils.expression_is_true:
+                  expression: " > 0"
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: number
+
+          - name: product_id
+            description: >
+              Unique identificator of each product.
+            tests:
+              - not_null
+
+          - name: quantity
+            description: >
+              Number of products sold in a given month.
+            tests:
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: number
+
+          - name: month
+            description: >
+              Month in which the budget has been calculated.
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_in_type_list:
+                  column_type_list:
+                    [date, datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+
+          - name: _fivetran_synced
+            description: >
+              fivetran_synced
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_in_type_list:
+                  column_type_list:
+                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
