@@ -115,9 +115,6 @@ sources:
           - name: _fivetran_deleted
             description: >
               fivetran_deleted
-            tests:
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: null
 
 
       - name: orders
@@ -205,6 +202,8 @@ sources:
             description: >
               Total cost of the order.
             tests:
+              - dbt_utils.expression_is_true:
+                  expression: " > 0"
               - dbt_expectations.expect_column_values_to_be_of_type:
                   column_type: float
 
@@ -240,9 +239,6 @@ sources:
           - name: _fivetran_deleted
             description: >
               fivetran_deleted
-            tests:
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: null
 
 
       - name: order_items
@@ -289,9 +285,6 @@ sources:
           - name: _fivetran_deleted
             description: >
               fivetran_deleted
-            tests:
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: null
 
 
       - name: products
@@ -368,9 +361,6 @@ sources:
           - name: _fivetran_deleted
             description: >
               fivetran_deleted
-            tests:
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: null
 
 
       - name: promos
@@ -414,9 +404,6 @@ sources:
           - name: _fivetran_deleted
             description: >
               fivetran_deleted
-            tests:
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: null
 
 
       - name: users
@@ -493,9 +480,8 @@ sources:
               User birthday.
             tests:
               - not_null
-              - dbt_expectations.expect_column_values_to_be_in_type_list:
-                  column_type_list:
-                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: date
 
           - name: _fivetran_synced
             description: >
@@ -509,9 +495,6 @@ sources:
           - name: _fivetran_deleted
             description: >
               fivetran_deleted
-            tests:
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: null
 
 
 

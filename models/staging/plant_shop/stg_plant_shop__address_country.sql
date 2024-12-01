@@ -15,12 +15,12 @@ source as (
 interm as (
 
     select
-        distinct country as country
+        distinct country as country -- selecciono los paises distintos
     from source
 
 ),
 
-renamed as (
+final as (
 
     select
         country,
@@ -29,4 +29,4 @@ renamed as (
 
 )
 
-select * from renamed
+select * from final

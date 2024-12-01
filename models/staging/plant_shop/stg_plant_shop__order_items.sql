@@ -12,17 +12,16 @@ source as (
 
 ),
 
-renamed as (
+final as (
 
     select
         order_id, 
         product_id, 
-        quantity,
-        _fivetran_deleted,
-        convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc  -- convierto la zona horaria
-
+        quantity::number as quantity,
+        convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc,  -- convierto la zona horaria
+        _fivetran_deleted
     from source
 
 )
 
-select * from renamed
+select * from final

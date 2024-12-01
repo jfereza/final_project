@@ -1,22 +1,29 @@
+{{
+  config(
+    materialized='table'
+  )
+}}
+
 with 
 
 source as (
 
-    select * from {{ source('plant_shop', 'budget') }}
+    select * from {{ ref('snp_plant_shop__budget') }}
 
 ),
 
-renamed as (
+final as (
 
     select
         product_id,
-        ifnull(quantity,0) as quantity, -- si es nulo, lo cambiamos a 0
-        month(month)::number as month,
-        convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc,
+        quantity::number as quantity,
+        month as updated_at, -- renombro la columna
+        convert_timezone('UTC', dbt_valid_from) as _snp_first_ingest_utc, -- renombro la columna y convierto la zona horaria
+        convert_timezone('UTC', dbt_valid_to) as _snp_invalid_from_utc, -- renombro la columna y convierto la zona horaria
+        convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc, -- convierto la zona horaria
     from source
-    order by
-        3,1
+    order by  3,1 -- lo ordeno por meses y por productos
 
 )
 
-select * from renamed
+select * from final

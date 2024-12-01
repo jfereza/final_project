@@ -23,7 +23,7 @@ iterm as (
 
 ),
 
-renamed as (
+final as (
 
     select
         shipping_service,
@@ -33,4 +33,4 @@ renamed as (
 
 )
 
-select * from renamed
+select * from final

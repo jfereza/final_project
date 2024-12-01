@@ -12,7 +12,7 @@ source as (
 
 ),
 
-renamed as (
+final as (
 
     select
         order_id,
@@ -21,14 +21,14 @@ renamed as (
         {{ dbt_utils.generate_surrogate_key(['status']) }} as status_id, -- hasheo el status del order
         created_at_utc,
         order_cost,
-        {{ dbt_utils.generate_surrogate_key(['promo_id']) }} as promo_id, -- hasheo el promo_id (ya he corregido vacios, espacios y null a "no discount")
+        {{ dbt_utils.generate_surrogate_key(['promo_id']) }} as promo_id, -- hasheo el promo_id 
         order_total,
-        _fivetran_deleted,
-        _fivetran_synced_utc
+        _fivetran_synced_utc,
+        _fivetran_deleted
 
     from 
         source
 
 )
 
-select * from renamed
+select * from final

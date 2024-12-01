@@ -8,22 +8,24 @@ with
 
 source as (
 
-    select * from {{ source('plant_shop', 'products') }}
+    select * from {{ ref('snp_plant_shop__products') }}
 
 ),
 
-renamed as (
+final as (
 
     select
         product_id,
-        TO_CHAR(price, '999.00') as price, -- unifico el formato del precio
         name as product_name, -- renombro la columna
-        inventory,
-        _fivetran_deleted,
-        convert_timezone('UTC',_fivetran_synced) as _fivetran_synced_UTC -- convierto la zona horaria
-
+        to_char(production_price, '999999.000') as production_price, -- dejo 3 decimales
+        to_char(price, '999999.000') as selling_price, -- dejo 3 decimales
+        inventory::number as inventory,
+        convert_timezone('UTC', dbt_valid_from) as _snp_first_ingest_utc, -- renombro la columna y convierto la zona horaria
+        convert_timezone('UTC', dbt_valid_to) as _snp_invalid_from_utc, -- renombro la columna y convierto la zona horaria
+        convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc, -- convierto la zona horaria
+        _fivetran_deleted
     from source
 
 )
 
-select * from renamed
+select * from final

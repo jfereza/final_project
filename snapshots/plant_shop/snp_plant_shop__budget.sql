@@ -1,4 +1,4 @@
-{% snapshot budget_snapshot %}
+{% snapshot snp_plant_shop__budget %}
 
 {{
     config(

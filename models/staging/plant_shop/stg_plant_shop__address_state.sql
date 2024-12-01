@@ -14,13 +14,12 @@ source as (
 
 interm as (
 
-    select
-        distinct state as state
+    select distinct state as state -- selecciono los estados distintos
     from source
 
 ),
 
-renamed as (
+final as (
 
     select
         state,
@@ -29,4 +28,4 @@ renamed as (
 
 )
 
-select * from renamed
+select * from final

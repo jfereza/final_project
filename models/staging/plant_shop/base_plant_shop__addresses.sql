@@ -12,17 +12,18 @@ source as (
 
 ),
 
-renamed as (
+final as (
 
     select
         address_id,
-        lower(country) as country, -- lo pongo todo en minusculas para evitar problemas con el hash
-        lower(state) as state, -- lo pongo todo en minusculas para evitar problemas con el hash
+        country, 
+        state, 
         zipcode,
         address, 
-       convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc  -- convierto la zona horaria
+        convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc,  -- convierto la zona horaria
+        _fivetran_deleted
     from source
 
 )
 
-select * from renamed
+select * from final
