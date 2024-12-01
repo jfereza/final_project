@@ -1,14 +1,14 @@
-{% snapshot products_snapshot %}
+{% snapshot users_snapshot %}
 
 {{
     config(
       target_schema='snapshots',
-      unique_key='product_id',
+      unique_key='user_id',
       strategy='timestamp',
       updated_at='updated_at',
     )
 }}
 
-select * from {{ source('plant_shop', 'products') }}
+select * from {{ source('plant_shop', 'users') }}
 
 {% endsnapshot %}
