@@ -8,14 +8,14 @@ with
 
 source as (
 
-    select * from {{ ref('base_sql_server_dbo__addresses') }}
+    select * from {{ ref('base_plant_shop__addresses') }}
 
 ),
 
 interm as (
 
     select
-        distinct country as country
+        distinct state as state
     from source
 
 ),
@@ -23,8 +23,8 @@ interm as (
 renamed as (
 
     select
-        country,
-        {{ dbt_utils.generate_surrogate_key(['country']) }} as country_id
+        state,
+        {{ dbt_utils.generate_surrogate_key(['state']) }} as state_id
     from interm
 
 )

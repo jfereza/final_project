@@ -2,7 +2,7 @@ with
 
 source as (
 
-    select * from {{ source('google_sheets', 'budget') }}
+    select * from {{ source('plant_shop', 'budget') }}
 
 ),
 
