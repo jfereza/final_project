@@ -17,7 +17,7 @@ renamed as (
     select
         order_id,
         tracking_id,
-        case -- cambio el nombre del shipping service por un hash. Si es nulo lo dejo nulo
+        case -- hasheo el shipping service. Si es nulo lo dejo nulo. Ya habia cambiado vacios y espacios por nulos en "base-orders"
             when shipping_service is null then shipping_service
             else {{ dbt_utils.generate_surrogate_key(['shipping_service']) }} 
             end as shipping_service_id, 

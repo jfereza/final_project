@@ -16,11 +16,11 @@ renamed as (
 
     select
         product_id,
-        price,
-        name as product_name,
+        TO_CHAR(price, '999.00') as price, -- unifico el formato del precio
+        name as product_name, -- renombro la columna
         inventory,
         _fivetran_deleted,
-        convert_timezone('UTC',_fivetran_synced) as _fivetran_synced_UTC
+        convert_timezone('UTC',_fivetran_synced) as _fivetran_synced_UTC -- convierto la zona horaria
 
     from source
 

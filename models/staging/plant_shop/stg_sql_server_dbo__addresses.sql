@@ -8,7 +8,7 @@ with
 
 source as (
 
-    select * from {{ source('sql_server_dbo', 'addresses') }}
+    select * from {{ ref('base_sql_server_dbo__addresses') }}
 
 ),
 
@@ -16,11 +16,11 @@ renamed as (
 
     select
         address_id,
+        {{ dbt_utils.generate_surrogate_key(['country']) }} as country_id, -- hasheo el country
+        {{ dbt_utils.generate_surrogate_key(['state']) }} as state_id, -- hasheo el state
         zipcode,
-        country,
-        address,
-        state,
-        convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc
+        address, 
+        _fivetran_synced_utc 
     from source
 
 )
