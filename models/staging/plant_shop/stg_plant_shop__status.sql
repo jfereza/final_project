@@ -8,19 +8,19 @@ with
 
 source as (
 
-    select * from {{ ref('base_sql_server_dbo__orders') }}
+    select * from {{ ref('base_plant_shop__orders') }}
 
 ),
 
 iterm as (
 
     select
-        distinct lower(status) as status -- selecciono los tipos de status distintos y los pongo en minus
+        distinct status as status -- selecciono los tipos de status distintos
     from source 
 
 ),
 
-renamed as (
+final as (
 
     select
         {{ dbt_utils.generate_surrogate_key(['status']) }} as status_id, -- hasheo el status
@@ -30,4 +30,4 @@ renamed as (
 
 )
 
-select * from renamed
+select * from final

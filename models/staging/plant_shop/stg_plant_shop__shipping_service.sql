@@ -8,7 +8,7 @@ with
 
 source as (
 
-    select * from {{ ref('base_sql_server_dbo__orders') }}
+    select * from {{ ref('base_plant_shop__orders') }}
 
 ),
 
@@ -23,14 +23,14 @@ iterm as (
 
 ),
 
-renamed as (
+final as (
 
     select
-        shipping_service,
-        {{ dbt_utils.generate_surrogate_key(['shipping_service']) }} as shipping_service_id
+        {{ dbt_utils.generate_surrogate_key(['shipping_service']) }} as shipping_service_id,
+        shipping_service
     from 
         iterm 
 
 )
 
-select * from renamed
+select * from final

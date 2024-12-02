@@ -8,19 +8,19 @@ with
 
 source as (
 
-    select * from {{ ref('base_sql_server_dbo__addresses') }}
+    select * from {{ ref('base_plant_shop__addresses') }}
 
 ),
 
 interm as (
 
     select
-        distinct country as country
+        distinct country as country -- selecciono los paises distintos
     from source
 
 ),
 
-renamed as (
+final as (
 
     select
         country,
@@ -29,4 +29,4 @@ renamed as (
 
 )
 
-select * from renamed
+select * from final

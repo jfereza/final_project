@@ -15,6 +15,48 @@ sources:
       error_after: { count: 48, period: hour }
 
     tables:
+      - name: budget
+
+        loaded_at_field: _fivetran_synced
+        description: >
+          Budget for each product and month.
+
+          - name: product_id
+            description: >
+              Unique identificator of each product.
+            tests:
+              - not_null
+              - unique
+              - dbt_utils.relationships_where:
+                 to: source('plant_shop','products')
+                 field: product_id
+
+          - name: quantity
+            description: >
+              Number of products sold in a given month.
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: number
+
+          - name: month
+            description: >
+              Month in which the budget has been calculated.
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_in_type_list:
+                  column_type_list:
+                    [date, datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+
+          - name: _fivetran_synced
+            description: >
+              fivetran_synced
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_in_type_list:
+                  column_type_list:
+                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+
 
       - name: addresses
 
@@ -71,63 +113,16 @@ sources:
                   column_type_list:
                     [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
-
-      - name: budget
-
-        loaded_at_field: _fivetran_synced
-        description: >
-          Budget for each product and month
-
-        columns:
-          - name: _row
+          - name: _fivetran_deleted
             description: >
-              Number of each row from google sheet.
-            tests:
-              - not_null
-              - unique
-              - dbt_utils.expression_is_true:
-                  expression: " > 0"
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: number
-
-          - name: product_id
-            description: >
-              Unique identificator of each product.
-            tests:
-              - not_null
-
-          - name: quantity
-            description: >
-              Number of products sold in a given month.
-            tests:
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: number
-
-          - name: month
-            description: >
-              Month in which the budget has been calculated.
-            tests:
-              - not_null
-              - dbt_expectations.expect_column_values_to_be_in_type_list:
-                  column_type_list:
-                    [date, datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
-
-          - name: _fivetran_synced
-            description: >
-              Number of each row from google sheet.
-            tests:
-              - not_null
-              - dbt_expectations.expect_column_values_to_be_in_type_list:
-                  column_type_list:
-                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
-
+              fivetran_deleted
 
 
       - name: orders
 
         loaded_at_field: _fivetran_synced
         description: >
-          Each of the orders ordered to the company.
+          Each of the orders placed to the company.
 
         columns:
           - name: order_id
@@ -140,6 +135,9 @@ sources:
           - name: shipping_service
             description: >
               Shipping service in charge of delivery.
+            tests:
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: varchar
 
           - name: shipping_cost
             description: >
@@ -153,9 +151,9 @@ sources:
               Unique identifier of the shipping address.
             tests:
               - not_null
-              - relationships:
-                  to: source('sql_server_db','addresses')
-                  field: address_id
+              - dbt_utils.relationships_where:
+                 to: source('plant_shop','addresses')
+                 field: address_id
 
           - name: created_at
             description: >
@@ -169,20 +167,26 @@ sources:
           - name: promo_id
             description: >
               Promotion description.
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: varchar
 
           - name: estimated_delivery_at
             description: >
               Delivery time estimated by the shipping service.
             tests:
-            - dbt_expectations.expect_column_values_to_be_in_type_list:
-                column_type_list:
-                  [null, datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
-
+              - dbt_expectations.expect_column_values_to_be_in_type_list:
+                  column_type_list:
+                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+              
           - name: order_cost
             description: >
-              Cost of the order.
+              Cost of the order (sum product units times product price).
             tests:
               - not_null
+              - dbt_utils.expression_is_true:
+                  expression: " > 0"
               - dbt_expectations.expect_column_values_to_be_of_type:
                   column_type: float
 
@@ -192,15 +196,14 @@ sources:
             tests:
               - not_null
               - dbt_utils.relationships_where:
-                  to: source('sql_server_db','users')
-                  field: user_id
-                  from_condition: user_id IS NOT - not_null
+                 to: source('plant_shop','users')
+                 field: user_id
                   
           - name: order_total
             description: >
-              Total cost of the order.
+              Total benefits of the order (order_cost - shipping_cost - discount). 
+              Null when status is "preparing".
             tests:
-              - not_null
               - dbt_utils.expression_is_true:
                   expression: " > 0"
               - dbt_expectations.expect_column_values_to_be_of_type:
@@ -212,7 +215,7 @@ sources:
             tests:
               - dbt_expectations.expect_column_values_to_be_in_type_list:
                   column_type_list:
-                    [null, datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
           - name: tracking_id
             description: >
@@ -220,7 +223,7 @@ sources:
 
           - name: status
             description: >
-              Statys of the order.
+              Status of the order.
             tests:
               - not_null
               - dbt_expectations.expect_column_values_to_be_of_type:
@@ -234,6 +237,10 @@ sources:
               - dbt_expectations.expect_column_values_to_be_in_type_list:
                   column_type_list:
                     [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+
+          - name: _fivetran_deleted
+            description: >
+              fivetran_deleted
 
 
       - name: order_items
@@ -249,9 +256,8 @@ sources:
             tests:
               - not_null
               - dbt_utils.relationships_where:
-                 to: source('sql_server_db','orders')
+                 to: source('plant_shop','orders')
                  field: order_id
-                 from_condition: order_id IS NOT NULL
 
           - name: product_id
             description: >
@@ -259,9 +265,8 @@ sources:
             tests:
               - not_null
               - dbt_utils.relationships_where:
-                 to: source('sql_server_db','products')
-                 field: order_id
-                 from_condition: product_id IS NOT NULL
+                 to: source('plant_shop','products')
+                 field: product_id
 
           - name: quantity
             description: >
@@ -272,12 +277,16 @@ sources:
 
           - name: _fivetran_synced
             description: >
-              _fivetran_synced.
+              fivetran_synced.
             tests:
               - not_null
               - dbt_expectations.expect_column_values_to_be_in_type_list:
                   column_type_list:
                     [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+
+          - name: _fivetran_deleted
+            description: >
+              fivetran_deleted
 
 
       - name: products
@@ -294,9 +303,19 @@ sources:
               - not_null
               - unique
 
+          - name: production_price
+            description: >
+              Costs of production of each product.
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: " > 0"
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: float
+
           - name: price
             description: >
-              Price of each product unit.
+              Slleing price of each product unit.
             tests:
               - not_null
               - dbt_utils.expression_is_true:
@@ -317,8 +336,19 @@ sources:
             description: >
               Product inventory.
             tests:
+              - dbt_utils.expression_is_true:
+                  expression: " >= 0"
               - dbt_expectations.expect_column_values_to_be_of_type:
                   column_type: number
+
+          - name: updated_at
+            description: >
+              Last datetime of user information update..
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_in_type_list:
+                  column_type_list:
+                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
           - name: _fivetran_synced
             description: >
@@ -328,6 +358,10 @@ sources:
               - dbt_expectations.expect_column_values_to_be_in_type_list:
                   column_type_list:
                     [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+
+          - name: _fivetran_deleted
+            description: >
+              fivetran_deleted
 
 
       - name: promos
@@ -353,7 +387,7 @@ sources:
 
           - name: status
             description: >
-              State of the promotion.
+              Current state of the promotion.
             tests:
               - not_null
               - dbt_expectations.expect_column_values_to_be_of_type:
@@ -367,6 +401,10 @@ sources:
               - dbt_expectations.expect_column_values_to_be_in_type_list:
                   column_type_list:
                     [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+
+          - name: _fivetran_deleted
+            description: >
+              fivetran_deleted
 
 
       - name: users
@@ -398,7 +436,7 @@ sources:
             tests:
               - not_null
               - relationships:
-                  to: source('sql_server_db','addresses')
+                  to: source('plant_shop','addresses')
                   field: address_id
 
           - name: last_name
@@ -438,6 +476,14 @@ sources:
             description: >
               User email.
 
+          - name: birthday
+            description: >
+              User birthday.
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: date
+
           - name: _fivetran_synced
             description: >
               fivetran_synced.
@@ -446,6 +492,10 @@ sources:
               - dbt_expectations.expect_column_values_to_be_in_type_list:
                   column_type_list:
                     [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+
+          - name: _fivetran_deleted
+            description: >
+              fivetran_deleted
 
 
 

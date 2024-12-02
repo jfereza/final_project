@@ -8,11 +8,11 @@ with
 
 source as (
 
-    select * from {{ ref('base_sql_server_dbo__addresses') }}
+    select * from {{ ref('base_plant_shop__addresses') }}
 
 ),
 
-renamed as (
+final as (
 
     select
         address_id,
@@ -20,9 +20,10 @@ renamed as (
         {{ dbt_utils.generate_surrogate_key(['state']) }} as state_id, -- hasheo el state
         zipcode,
         address, 
-        _fivetran_synced_utc 
+        _fivetran_synced_utc, 
+        _fivetran_deleted
     from source
 
 )
 
-select * from renamed
+select * from final

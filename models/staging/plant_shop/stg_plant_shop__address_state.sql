@@ -8,19 +8,18 @@ with
 
 source as (
 
-    select * from {{ ref('base_sql_server_dbo__addresses') }}
+    select * from {{ ref('base_plant_shop__addresses') }}
 
 ),
 
 interm as (
 
-    select
-        distinct state as state
+    select distinct state as state -- selecciono los estados distintos
     from source
 
 ),
 
-renamed as (
+final as (
 
     select
         state,
@@ -29,4 +28,4 @@ renamed as (
 
 )
 
-select * from renamed
+select * from final
