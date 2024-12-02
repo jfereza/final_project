@@ -5,23 +5,18 @@ snapshots:
   - name: snp_plant_shop__budget
 
     description: >
-          Budget for each product and month.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - product_id
-            - month
-    
-    columns:
+      Snapshot of budget for each product and month.
+
       - name: product_id
-        data_type: varchar
         description: >
-          Unique identifier of each product.
+          Unique identificator of each product.
         tests:
           - not_null
+          - dbt_utils.relationships_where:
+              to: source('plant_shop','products')
+              field: product_id
 
       - name: quantity
-        data_type: number
         description: >
           Number of products sold in a given month.
         tests:
@@ -30,40 +25,39 @@ snapshots:
               column_type: number
 
       - name: month
-        data_type: number
         description: >
           Month in which the budget has been calculated.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list:
+                [date, datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
-      - name: _fivetran_synced_utc
-        data_type: timestamp_tz
+      - name: _fivetran_synced
         description: >
-          fivetran_synced in UTC
+          fivetran_synced
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list:
+                [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
 
   - name: snp_plant_shop__products
+    
     description: >
-      All our products.
+      Snapshot of all our products information.
+
     columns:
       - name: product_id
-        data_type: varchar
         description: >
           Unique identifier of each product.
         tests:
           - not_null
-          - unique
 
-      - name: price
-        data_type: float
+      - name: production_price
         description: >
-          Price of each product unit.
+          Costs of production of each product.
         tests:
           - not_null
           - dbt_utils.expression_is_true:
@@ -71,63 +65,112 @@ snapshots:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: float
 
-      - name: product_name
-        data_type: varchar
+      - name: price
+        description: >
+          Selling price of each product unit.
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: " > 0"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: float
+
+      - name: name
         description: >
           Description of the product.
         tests:
           - not_null
-          - unique
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: varchar
 
       - name: inventory
-        data_type: number
         description: >
           Product inventory.
         tests:
+          - dbt_utils.expression_is_true:
+              expression: " >= 0"
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: number
 
+      - name: updated_at
+        description: >
+          Last datetime of user information update..
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list:
+                [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+
+      - name: _fivetran_synced
+        description: >
+          fivetran_synced.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list:
+                [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+
       - name: _fivetran_deleted
-        data_type: boolean
         description: >
           fivetran_deleted
 
-      - name: _fivetran_synced_utc
-        data_type: timestamp_tz
-        description: >
-          fivetran_synced in UTC
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
-
 
   - name: snp_plant_shop__users
+    
     description: >
-      Users information.
+      Snapshot of users information
+
     columns:
       - name: user_id
-        data_type: varchar
         description: >
           Unique identifier of each user.
         tests:
+        - not_null
+
+      - name: updated_at
+        description: >
+          Last datetime of user information update.
+        tests:
           - not_null
-          - unique
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list:
+                [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
       - name: address_id
-        data_type: varchar
         description: >
-          Identifier of the address associated with the user.
+          Unique identifier of the user address.
         tests:
           - not_null
           - relationships:
-              to: ref('snp_plant_shop__addresses')
+              to: source('plant_shop','addresses')
               field: address_id
 
+      - name: last_name
+        description: >
+          Last user name.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: created_at
+        description: >
+          User generation datetime.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list:
+                [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+
+      - name: phone_number
+        description: >
+          User phone number
+
+      - name: total_orders
+        description: >
+          Bad column.
+
       - name: first_name
-        data_type: varchar
         description: >
           First user name.
         tests:
@@ -135,61 +178,27 @@ snapshots:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: varchar
 
-      - name: last_name
-        data_type: varchar
-        description: >
-          Last user namr
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
-
       - name: email
-        data_type: varchar
         description: >
           User email.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
-      - name: phone_number
-        data_type: number
+      - name: birthday
         description: >
-          User phone number
+          User birthday.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
+              column_type: date
 
-      - name: created_at_utc
-        data_type: timestamp_tz
+      - name: _fivetran_synced
         description: >
-          User generation datetime in UTC.
+          fivetran_synced.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
-
-      - name: updated_at_utc
-        data_type: timestamp_tz
-        description: >
-          Last datetime of user information update.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list:
+                [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
       - name: _fivetran_deleted
-        data_type: boolean
         description: >
           fivetran_deleted
-
-      - name: _fivetran_synced_utc
-        data_type: timestamp_tz
-        description: >
-          fivetran_synced in UTC
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ

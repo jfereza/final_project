@@ -17,8 +17,8 @@ final as (
     select
         product_id,
         name as product_name, -- renombro la columna
-        to_char(production_price, '999999.000') as production_price, -- dejo 3 decimales
-        to_char(price, '999999.000') as selling_price, -- dejo 3 decimales
+        production_price::decimal(14,3) as production_price, -- dejo 3 decimales
+        price::decimal(14,3) as selling_price, -- dejo 3 decimales
         inventory::number as inventory,
         convert_timezone('UTC', dbt_valid_from) as _snp_first_ingest_utc, -- renombro la columna y convierto la zona horaria
         convert_timezone('UTC', dbt_valid_to) as _snp_invalid_from_utc, -- renombro la columna y convierto la zona horaria

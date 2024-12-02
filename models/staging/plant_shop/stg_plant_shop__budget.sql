@@ -17,7 +17,7 @@ final as (
     select
         product_id,
         quantity::number as quantity,
-        month as updated_at, -- renombro la columna
+        month::date as updated_at, -- casteo y renombro la columna
         convert_timezone('UTC', dbt_valid_from) as _snp_first_ingest_utc, -- renombro la columna y convierto la zona horaria
         convert_timezone('UTC', dbt_valid_to) as _snp_invalid_from_utc, -- renombro la columna y convierto la zona horaria
         convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc, -- convierto la zona horaria

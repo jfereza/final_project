@@ -26,8 +26,8 @@ iterm as (
 final as (
 
     select
-        shipping_service,
-        {{ dbt_utils.generate_surrogate_key(['shipping_service']) }} as shipping_service_id
+        {{ dbt_utils.generate_surrogate_key(['shipping_service']) }} as shipping_service_id,
+        shipping_service
     from 
         iterm 
 

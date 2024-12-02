@@ -35,6 +35,7 @@ sources:
             description: >
               Number of products sold in a given month.
             tests:
+              - not_null
               - dbt_expectations.expect_column_values_to_be_of_type:
                   column_type: number
 
@@ -181,7 +182,7 @@ sources:
               
           - name: order_cost
             description: >
-              Cost of the order.
+              Cost of the order (sum product units times product price).
             tests:
               - not_null
               - dbt_utils.expression_is_true:
@@ -200,7 +201,8 @@ sources:
                   
           - name: order_total
             description: >
-              Total cost of the order.
+              Total benefits of the order (order_cost - shipping_cost - discount). 
+              Null when status is "preparing".
             tests:
               - dbt_utils.expression_is_true:
                   expression: " > 0"
@@ -310,7 +312,6 @@ sources:
                   expression: " > 0"
               - dbt_expectations.expect_column_values_to_be_of_type:
                   column_type: float
-
 
           - name: price
             description: >

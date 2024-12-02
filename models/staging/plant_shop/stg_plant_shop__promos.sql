@@ -26,7 +26,7 @@ interm as (
 
     select 
         'no discount' as promo_id,
-        0 as discount,
+        0::number as discount,
         'active' as status,
         convert_timezone('UTC', current_date) as _fivetran_synced_utc,  -- convierto la zona horaria
         null as _fivetran_deleted
@@ -40,8 +40,8 @@ final as (
         promo_id as promo_name, -- renombro la columna
         discount,
         status,
-        _fivetran_deleted,
-        _fivetran_synced_utc
+        _fivetran_synced_utc,
+        _fivetran_deleted
     from interm
     order by discount ASC
 
