@@ -102,13 +102,13 @@ models:
 
       - name: order_cost
         description: >
-          Cost of the order (sum product units times product price).
+          Cost of the order (sum product units times product selling price).
         tests:
           - not_null
           - dbt_utils.expression_is_true:
               expression: " > 0"
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: decimal
+              column_type: number
 
       - name: status
         description: >
@@ -132,7 +132,7 @@ models:
           Null when status is "preparing".
         tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: decimal
+              column_type: number
 
       - name: tracking_id
         description: >
@@ -171,7 +171,7 @@ models:
           - dbt_utils.expression_is_true:
               expression: " > 0"
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: decimal
+              column_type: number
 
       - name: _fivetran_synced_utc
         description: >
@@ -435,13 +435,13 @@ models:
 
       - name: order_cost
         description: >
-          Cost of the order (sum product units times product price).
+          Cost of the order (sum product units times product selling price).
         tests:
           - not_null
           - dbt_utils.expression_is_true:
               expression: " > 0"
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: decimal
+              column_type: number
 
       - name: status_id
         description: >
@@ -469,7 +469,7 @@ models:
           - dbt_utils.expression_is_true:
               expression: " > 0"
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: decimal
+              column_type: number
 
       - name: _fivetran_synced_utc
         description: >
@@ -504,9 +504,9 @@ models:
           - dbt_utils.expression_is_true:
               expression: " > 0"
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: decimal
+              column_type: number
 
-      - name: price
+      - name: selling_price
         description: >
           Selling price of each product unit.
         tests:
@@ -514,9 +514,9 @@ models:
           - dbt_utils.expression_is_true:
               expression: " > 0"
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: decimal
+              column_type: number
 
-      - name: name
+      - name: product_name
         description: >
           Description of the product.
         tests:
@@ -652,7 +652,7 @@ models:
           Cost associated with the shipping service.
         tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: decimal
+              column_type: number
 
       - name: tracking_id
         description: >
