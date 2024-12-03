@@ -3,7 +3,7 @@
     materialized='table'
   )
 }}
-
+        
 with 
 
 orders_s as (
@@ -31,9 +31,9 @@ iterm as (
         product_id,
         B.quantity as quantity,
         status_id,
-        created_at_utc as created_at_datetime,
-        date(created_at_utc) as created_at_date, 
-        time(created_at_utc) as created_at_time, 
+        created_at_utc_datetime,
+        created_at_date, 
+        created_at_utc_time, 
         user_id,
         address_id,
         order_cost,

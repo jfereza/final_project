@@ -28,7 +28,7 @@ interm as (
         inventory,
         B.quantity as budget,
         date(A.updated_at_utc) as A_updated_at_date, 
-        date(B.updated_at) as B_updated_at_date
+        updated_at_date as B_updated_at_date
     from products_s A
     left join budget_s B
         on A.product_id = B.product_id

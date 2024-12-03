@@ -12,7 +12,7 @@ source as (
 
 ),
 
-final as (
+interm as (
 
     select
         order_id, 
@@ -21,6 +21,18 @@ final as (
         convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc,  -- convierto la zona horaria
         _fivetran_deleted
     from source
+
+),
+
+final as (
+
+    select
+        order_id, 
+        product_id, 
+        quantity,
+        _fivetran_synced_utc, 
+        _fivetran_deleted
+    from interm
 
 )
 

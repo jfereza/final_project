@@ -12,13 +12,14 @@ source as (
 
 ),
 
-final as (
+interm as (
 
     select
         user_id, 
         first_name, 
         last_name, 
         birthday,
+        datediff(year, birthday, current_date()) as age,
         email, 
         translate(phone_number, '()-','')::number as phone_number, -- formateo los numeros de telefonos
         address_id, 
@@ -29,6 +30,56 @@ final as (
         convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc, -- convierto la zona horaria
         _fivetran_deleted
     from source
+
+),
+
+interm2 as (
+
+    select
+        user_id, 
+        first_name, 
+        last_name, 
+        birthday,
+        age,
+        email, 
+        phone_number, 
+        address_id, 
+        created_at_utc as created_at_utc_datetime, 
+        date(created_at_utc) as created_at_date, 
+        time(created_at_utc) as created_at_utc_time,
+        updated_at_utc as updated_at_utc_datetime, 
+        date(updated_at_utc) as updated_at_date, 
+        time(updated_at_utc) as updated_at_utc_time,
+        _snp_first_ingest_utc, 
+        _snp_invalid_from_utc, 
+        _fivetran_synced_utc, 
+        _fivetran_deleted
+    from interm
+
+),
+
+final as (
+
+    select
+        user_id, 
+        first_name, 
+        last_name, 
+        birthday,
+        age,
+        email, 
+        phone_number, 
+        address_id, 
+        created_at_utc_datetime, 
+        created_at_date, 
+        created_at_utc_time,
+        updated_at_utc_datetime, 
+        updated_at_date, 
+        updated_at_utc_time,
+        _snp_first_ingest_utc, 
+        _snp_invalid_from_utc, 
+        _fivetran_synced_utc, 
+        _fivetran_deleted
+    from interm2
 
 )
 

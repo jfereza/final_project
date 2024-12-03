@@ -12,7 +12,7 @@ source as (
 
 ),
 
-final as (
+interm as (
     
     select 
         order_id,
@@ -35,6 +35,62 @@ final as (
         convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc, -- convierto la zona horaria
         _fivetran_deleted
     from source
+
+),
+
+interm2 as (
+    
+    select 
+        order_id,
+        user_id,
+        address_id,
+        created_at_utc as created_at_utc_datetime, 
+        date(created_at_utc) as created_at_date, 
+        time(created_at_utc) as created_at_utc_time,
+        order_cost,  
+        status, 
+        shipping_service, 
+        shipping_cost,  
+        tracking_id, 
+        estimated_delivery_at_utc as estimated_delivery_at_utc_datetime, 
+        date(estimated_delivery_at_utc) as estimated_delivery_at_date, 
+        time(estimated_delivery_at_utc) as estimated_delivery_at_utc_time,
+        delivered_at_utc as delivered_at_utc_datetime, 
+        date(delivered_at_utc) as delivered_at_date, 
+        time(delivered_at_utc) as delivered_at_utc_time,
+        promo_id, 
+        order_total, 
+        _fivetran_synced_utc, 
+        _fivetran_deleted
+    from interm
+
+),
+
+final as (
+    
+    select 
+        order_id,
+        user_id,
+        address_id,
+        created_at_utc_datetime, 
+        created_at_date, 
+        created_at_utc_time,
+        order_cost,  
+        status, 
+        shipping_service, 
+        shipping_cost,  
+        tracking_id, 
+        estimated_delivery_at_utc_datetime, 
+        estimated_delivery_at_date, 
+        estimated_delivery_at_utc_time,
+        delivered_at_utc_datetime, 
+        delivered_at_date, 
+        delivered_at_utc_time,
+        promo_id, 
+        order_total, 
+        _fivetran_synced_utc, 
+        _fivetran_deleted
+    from interm2
 
 )
 

@@ -33,7 +33,7 @@ interm as (
 
 ),
 
-final as (
+interm2 as (
 
     select
         {{ dbt_utils.generate_surrogate_key(['promo_id']) }} as promo_id, -- hasheo el promo_id
@@ -44,6 +44,19 @@ final as (
         _fivetran_deleted
     from interm
     order by discount ASC
+
+),
+
+final as (
+
+    select
+        promo_id, 
+        promo_name, 
+        discount,
+        status,
+        _fivetran_synced_utc,
+        _fivetran_deleted
+    from interm2
 
 )
 

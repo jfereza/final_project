@@ -20,13 +20,23 @@ iterm as (
 
 ),
 
-final as (
+interm2 as (
 
     select
         {{ dbt_utils.generate_surrogate_key(['status']) }} as status_id, -- hasheo el status
         status as status
     from 
         iterm 
+
+),
+
+final as (
+
+    select
+        status_id, 
+        status
+    from 
+        interm2 
 
 )
 
