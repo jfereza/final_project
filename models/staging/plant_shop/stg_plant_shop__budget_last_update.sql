@@ -12,7 +12,7 @@ source as (
 
 ),
 
-final as (
+interm as (
 
     select
         product_id,
@@ -22,6 +22,20 @@ final as (
         _snp_invalid_from_utc, 
         _fivetran_synced_utc
     from source
+    where _snp_invalid_from_utc is null
+
+),
+
+final as (
+
+    select
+        product_id,
+        quantity,
+        updated_at_date, 
+        _snp_first_ingest_utc, 
+        _snp_invalid_from_utc, 
+        _fivetran_synced_utc
+    from interm
 
 )
 

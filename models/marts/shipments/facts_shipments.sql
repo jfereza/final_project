@@ -24,65 +24,88 @@ shipp_info_s as (
 
 ),
 
-interm as (  -- cruzamos orders, status y shipping_info
+orders as ( -- seleccionamos solo los orders que estan con status = shipped o delivered
 
     select
-        tracking_id,
-        A.order_id as order_id,
-        B.status_id as status_id,
-        C.status as status_desc,
-        B.address_id as address_id,
-        shipping_service_id, 
-        shipping_cost,
-        estimated_delivery_at_utc as estimated_delivery_at_datetime,
-        date(estimated_delivery_at_utc) as estimated_delivery_at_date, 
-        time(estimated_delivery_at_utc) as estimated_delivery_at_time, 
-        delivered_at_utc as delivered_at_datetime,
-        date(delivered_at_utc) as delivered_at_date, 
-        time(delivered_at_utc) as delivered_at_time
-    from shipp_info_s A
-    left join orders_s B
-        on A.order_id = B.order_id
-    left join status_s C
-        on B.status_id = C.status_id
+        order_id,
+        address_id,
+        created_at_utc_datetime, 
+        created_at_date, 
+        created_at_utc_time
+    from orders_s A
+    left join status_s B
+        on A.status_id = B.status_id
+    where status != 'preparing' 
 
 ),
 
-interm2 as ( -- nos quedamos solo con los pedidos delivered o shipped
+interm as ( -- cruzamos los orders_id (de orders shipped o deliveredorders) con el shipping_info
 
     select
-        tracking_id,
-        order_id,
-        status_id,
+        A.order_id as order_id,
         address_id,
+        tracking_id,
         shipping_service_id, 
         shipping_cost,
-        estimated_delivery_at_datetime,
+        created_at_utc_datetime, 
+        created_at_date, 
+        created_at_utc_time,
+        estimated_delivery_at_utc_datetime,
         estimated_delivery_at_date, 
-        estimated_delivery_at_time, 
-        delivered_at_datetime,
+        estimated_delivery_at_utc_time, 
+        delivered_at_utc_datetime,
         delivered_at_date, 
-        delivered_at_time
-    from interm
-    where status_desc != 'preparing'
+        delivered_at_utc_time
+    from  orders A
+    left join shipp_info_s B
+        on A.order_id = B.order_id
+
+),
+
+interm2 as ( -- añadimos algunas columnas 
+
+    select
+        order_id,
+        address_id,
+        tracking_id,
+        shipping_service_id, 
+        shipping_cost,
+        datediff(day, created_at_date, estimated_delivery_at_date) as estimated_delivery_days,
+        datediff(day, created_at_date, delivered_at_date) as real_delivery_days,
+        datediff(day, delivered_at_date, estimated_delivery_at_date) as dif_estimated_real_delivery_days,
+        created_at_utc_datetime,
+        created_at_date, 
+        created_at_utc_time, 
+        estimated_delivery_at_utc_datetime,
+        estimated_delivery_at_date, 
+        estimated_delivery_at_utc_time, 
+        delivered_at_utc_datetime,
+        delivered_at_date, 
+        delivered_at_utc_time
+    from  interm
 
 ),
 
 final as (
 
     select
-        tracking_id,
         order_id,
-        status_id,
         address_id,
+        tracking_id,
         shipping_service_id, 
         shipping_cost,
-        estimated_delivery_at_datetime,
+        estimated_delivery_days,
+        real_delivery_days,
+        dif_estimated_real_delivery_days,
+        created_at_utc_datetime,
+        created_at_date, 
+        created_at_utc_time, 
+        estimated_delivery_at_utc_datetime,
         estimated_delivery_at_date, 
-        estimated_delivery_at_time, 
-        delivered_at_datetime,
+        estimated_delivery_at_utc_time, 
+        delivered_at_utc_datetime,
         delivered_at_date, 
-        delivered_at_time
+        delivered_at_utc_time
     from interm2
 
 )

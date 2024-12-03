@@ -36,18 +36,18 @@ status_s as (
 
 ),
 
-orders as ( -- seleccionamos solo los order que estan shipped o delivered
+orders as ( -- seleccionamos solo los adresses_id de los orders que estan con status = shipped o delivered
 
     select
         address_id,
     from orders_s A
     left join status_s B
         on A.status_id = B.status_id
-    where B.status != 'preparing' 
+    where status != 'preparing' 
 
 ),
 
-addresses as ( -- unimos tods la info de los addresses
+addresses as ( -- unimos la info de contry y state a los addresses
 
     select
         address_id,
@@ -63,7 +63,7 @@ addresses as ( -- unimos tods la info de los addresses
 
 ),
 
-interm as ( -- cruzamos orders != preparing con las addresses completas
+interm as ( -- cruzamos los adresses_id (de orders shipped o delivered) con las addresses completas
 
     select
         A.address_id as address_id,  

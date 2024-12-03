@@ -12,22 +12,12 @@ status_s as (
 
 ),
 
-interm as ( -- en este departamento solo nos interesan los pedidos delivered o shipped
-
-    select
-        status_id, 
-        status
-    from status_s 
-    where status != 'preparing'
-
-),
-
 final as (
 
     select
         status_id, 
         status
-    from interm 
+    from status_s 
 
 )
 

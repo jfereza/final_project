@@ -8,7 +8,7 @@ with
 
 users_s as (
 
-    select * from {{ ref('stg_plant_shop__users') }}
+    select * from {{ ref('stg_plant_shop__users_last_update') }} -- el ultimo estado de los users
 
 ),
 
@@ -18,7 +18,7 @@ orders_s as (
 
 ),
 
-interm as ( -- cruzamos los orders con users, para quedarnos solo con los users que han pedido algo 
+interm as ( -- cruzamos los orders con users para quedarnos solo con los users que han pedido algo 
 
     select
         A.user_id as user_id,  
@@ -28,13 +28,13 @@ interm as ( -- cruzamos los orders con users, para quedarnos solo con los users 
         age,
         email, 
         phone_number,
-        B.address_id as address_id, 
-        B.created_at_utc as created_at_datetime,
-        date(B.created_at_utc) as created_at_date, 
-        time(B.created_at_utc) as created_at_time, 
-        B.updated_at_utc as updated_at_datetime,
-        date(B.updated_at_utc) as updated_at_date, 
-        time(B.updated_at_utc) as updated_at_time, 
+        B.address_id as address_id, -- nos interesa la address del user, no del order
+        B.created_at_utc_datetime as created_at_utc_datetime, -- nos interesa esta info del user, no del order
+        B.created_at_date as created_at_date, 
+        B.created_at_utc_time as created_at_utc_time, 
+        updated_at_utc_datetime,
+        updated_at_date, 
+        updated_at_utc_time, 
         _snp_first_ingest_utc,
         _snp_invalid_from_utc
     from orders_s A
@@ -54,17 +54,16 @@ final as (
         email, 
         phone_number,
         address_id, 
-        created_at_datetime,
+        created_at_utc_datetime,
         created_at_date, 
-        created_at_time, 
-        updated_at_datetime,
+        created_at_utc_time, 
+        updated_at_utc_datetime,
         updated_at_date, 
-        updated_at_time, 
+        updated_at_utc_time, 
         _snp_first_ingest_utc,
         _snp_invalid_from_utc
     from interm 
 
 )
-
 
 select * from final

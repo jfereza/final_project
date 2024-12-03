@@ -17,8 +17,7 @@ final as (
     select
         shipping_service_id,
         shipping_service
-    from 
-        ship_serv_s 
+    from ship_serv_s 
 
 )
 

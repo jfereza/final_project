@@ -30,7 +30,7 @@ order_s as (
 
 ),
 
-addresses as ( -- unimos toda la info de todos los addresses (users y orders)
+addresses as ( -- unimos la info de country y state a los addresses
 
     select
         address_id,
@@ -46,7 +46,7 @@ addresses as ( -- unimos toda la info de todos los addresses (users y orders)
 
 ),
 
-interm as ( -- cruzamos la info de los addresses con los pedidos, solo queremos direcciones puestas en los pedidos
+interm as ( -- cruzamos la info de los addresses con los orders, ya que solo queremos direcciones puestas en los pedidos
 
     select
         A.address_id as address_id,  
