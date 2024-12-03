@@ -1,0 +1,582 @@
+
+version: 2
+
+models:
+  - name: base_spotify__top10_genres
+    
+    description: >
+      USA songs chart for every week from 2022/01/01 up to 2024/11/30.
+
+    columns:
+      - name: top
+        data_type: number
+        description: >
+          Position of the song in the chart.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: puntuation
+        data_type: number
+        description: >
+          Puntuation of the song. For top 1, puntuation is 10. For top 10, puntuation is 1.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: song
+        data_type: varchar
+        description: >
+          Title of the song.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: author
+        data_type: varchar
+        description: >
+          Author of the song.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: all_genres
+        data_type: varchar
+        description: >
+          Spotify list of genres for the song.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: month_name
+        data_type: varchar
+        description: >
+          Month (name) of chart registration.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: month_num
+        data_type: number
+        description: >
+          Month (num) of chart registration.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: year
+        data_type: number
+        description: >
+          Year of chart registration.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: active_month
+        data_type: date
+        description: >
+          Month in which this chart was recorded.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: blues
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: country
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: easy_listening
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: electronic
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: folk
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: hip_hop
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: jazz
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: pop
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: rb
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: soul
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: rock
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: metal
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: punk
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: reggaeton
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: trap
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: rap
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: rage
+        data_type: number
+        description: >
+          Musical genre. If Spotify genre list for the song includes this genre, is 1. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+
+
+  - name: stg_spotify__genres_puntuation_v1
+    
+    description: >
+      Puntuations of the musical genres by month.
+    
+    columns:
+      - name: month
+        data_type: number
+        description: >
+          Month (num) of chart registration.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: year
+        data_type: number
+        description: >
+          Year of chart registration.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: active_month
+        data_type: date
+        description: >
+          Month in which this chart was recorded.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: blues
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: country
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: easy_listening
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: electronic
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: folk
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: hip_hop
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: jazz
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: pop
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: rb
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: soul
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: rock
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: metal
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: punk
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: reggaeton
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: trap
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: rap
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: rage
+        data_type: number
+        description: >
+          Musical genre puntuation within the active month. 
+          If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+
+
+  - name: stg_spotify__genres_puntuation_v2
+    
+    description: >
+      Puntuation of the musical genres by month.
+    
+    columns:
+      - name: month
+        data_type: number
+        description: >
+          Month (num) of chart registration.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: year
+        data_type: number
+        description: >
+          Year of chart registration.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: active_month
+        data_type: date
+        description: >
+          Month in which this chart was recorded.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: genre
+        data_type: varchar
+        description: >
+          Musical genre list. 
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: puntuation
+        data_type: number
+        description: >
+          Puntuation of the genre wihtin the active month. 
+          If Spotify genre list for the song includes a genre, is the sum of the puntuation of the song. Else 0.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+
+
+  - name: stg_spotify__song_puntuation
+    
+    description: >
+      Puntuation of the songs by month.
+    
+    columns:
+      - name: month
+        data_type: number
+        description: >
+          Month (num) of chart registration.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: year
+        data_type: number
+        description: >
+          Year of chart registration.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: active_month
+        data_type: date
+        description: >
+          Month in which this chart was recorded.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: song
+        data_type: varchar
+        description: >
+          Title of the song.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: author
+        data_type: varchar
+        description: >
+          Author of the song.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: puntuation
+        data_type: number
+        description: >
+          Puntuation of the song. For top 1, puntuation is 10. For top 10, puntuation is 1.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: times
+        data_type: number
+        description: >
+          Times the song apeared on the chart during the active_month.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: total_puntuation
+        data_type: number
+        description: >
+          Puntuation of the song resulting of multiplying "times" by "puntuation".
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
