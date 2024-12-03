@@ -37,5 +37,26 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 models:
   final_project:
+
     example:
       +materialized: table
+  
+    staging:
+        +materialized: table
+        +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER"
+        plant_shop:
+          +schema: plant_shop
+        spotify:
+          +schema: spotify
+    
+    marts:
+      +materialized: table
+      +database: "{{ env_var('DBT_ENVIRONMENTS') }}_GOLD"
+      core:
+        +schema: core
+      marketing:
+        +schema: marketing
+      orders:
+        +schema: orders
+      shipments:
+        +schema: shipments

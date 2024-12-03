@@ -44,6 +44,7 @@ orders_ship_item as ( -- cruzamos orders con shipping_info (para extraer el ship
         address_id,
         promo_id, 
         shipping_cost as order_shipping_cost,
+        order_cost as order_selling_price,
         order_total
     from orders_s A
     left join ship_info_s B
@@ -53,7 +54,7 @@ orders_ship_item as ( -- cruzamos orders con shipping_info (para extraer el ship
 
 ),
 
-interm as ( -- cruzamos orders+shipping_info+order_items con products (para name, prod_price y selling price) 
+orders_ship_item_prod as ( -- cruzamos orders+shipping_info+order_items con products (para name, prod_price y selling price) 
 
     select
         order_id,
@@ -70,8 +71,8 @@ interm as ( -- cruzamos orders+shipping_info+order_items con products (para name
         address_id,
         promo_id, 
         order_shipping_cost,
-        order_total,
-        updated_at_date
+        order_selling_price,
+        order_total
     from orders_ship_item A
     left join products_s B
         on ((A.product_id = B.product_id) 
@@ -81,25 +82,67 @@ interm as ( -- cruzamos orders+shipping_info+order_items con products (para name
 
 ),
 
-final as (
+stats as (
 
     select
         order_id,
+        sum(quantity * production_price) as order_production_costs,
+        max(order_total) - sum(quantity * production_price) as order_benefits,
+    from orders_ship_item_prod
+    group by order_id
+
+),
+
+
+interm as (
+
+    select
+        A.order_id as order_id,
         status_id,
+        user_id,
+        address_id,
         product_id,
         product_name,
         quantity,
         production_price,
         selling_price,
-        created_at_date, 
-        updated_at_date,
-        created_at_utc_datetime,
-        created_at_utc_time, 
-        user_id,
-        address_id,
         promo_id, 
         order_shipping_cost,
-        order_total
+        order_selling_price,
+        order_total,
+        order_production_costs,
+        order_benefits,
+        created_at_date, 
+        created_at_utc_datetime,
+        created_at_utc_time,
+    from orders_ship_item_prod A
+    left join stats B
+        on A.order_id = B.order_id
+
+),
+
+
+final as (
+
+    select
+        order_id,
+        user_id,
+        address_id,
+        status_id,
+        product_id,
+        product_name,
+        quantity,
+        production_price,
+        selling_price, 
+        promo_id, 
+        order_shipping_cost,
+        order_selling_price,
+        order_total,
+        order_production_costs,
+        order_benefits,
+        created_at_date, 
+        created_at_utc_datetime,
+        created_at_utc_time
     from interm
 
 )
