@@ -254,6 +254,7 @@ models:
           Unique identifier of each user.
         tests:
           - not_null
+          - unique
 
       - name: first_name
         description: >
@@ -387,6 +388,7 @@ models:
           Unique identifier for each address.
         tests:
           - not_null
+          - unique
 
       - name: country
         description: >

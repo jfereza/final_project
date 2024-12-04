@@ -21,7 +21,7 @@ orders_s as (
 interm as ( -- cruzamos los orders con users para quedarnos solo con los users que han pedido algo 
 
     select
-        A.user_id as user_id,  
+        distinct A.user_id as user_id,  
         first_name, 
         last_name, 
         birthday,
