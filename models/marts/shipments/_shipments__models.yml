@@ -14,6 +14,7 @@ models:
           Unique identifier for each address.
         tests:
           - not_null
+          - unique
 
       - name: country
         description: >

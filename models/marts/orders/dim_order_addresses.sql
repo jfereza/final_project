@@ -49,7 +49,7 @@ addresses as ( -- unimos la info de country y state a los addresses
 interm as ( -- cruzamos la info de los addresses con los orders, ya que solo queremos direcciones puestas en los pedidos
 
     select
-        A.address_id as address_id,  
+        distinct A.address_id as address_id,  
         country, 
         state,
         zipcode,
