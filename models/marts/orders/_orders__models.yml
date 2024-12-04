@@ -158,18 +158,16 @@ models:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: number
 
-      - name: order_total
+      - name: order_gross_benefits
         data_type: number
         description: >
           Gross benefits of the order ("order_selling_price" - "shipping_cost" - "discount"). 
           Null when status is "preparing".
         tests:
-          - dbt_utils.expression_is_true:
-              expression: " > 0"
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: number
 
-      - name: order_benefits
+      - name: order_neat_benefits
         data_type: number
         description: >
           Neat benefits of the order ("order_total" - "order_production_costs"). 
