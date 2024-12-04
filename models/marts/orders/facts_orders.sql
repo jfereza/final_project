@@ -44,7 +44,7 @@ orders_ship_item as ( -- cruzamos orders con shipping_info (para extraer el ship
         address_id,
         promo_id, 
         shipping_cost as order_shipping_cost,
-        order_cost as order_selling_price,
+        order_selling_price,
         order_total
     from orders_s A
     left join ship_info_s B
@@ -67,6 +67,7 @@ orders_ship_item_prod as ( -- cruzamos orders+shipping_info+order_items con prod
         created_at_utc_datetime,
         created_at_date, 
         created_at_utc_time, 
+        B.updated_at_date as updated_at_date,
         user_id,
         address_id,
         promo_id, 
@@ -76,8 +77,8 @@ orders_ship_item_prod as ( -- cruzamos orders+shipping_info+order_items con prod
     from orders_ship_item A
     left join products_s B
         on ((A.product_id = B.product_id) 
-            and (month(A.created_at_date) = month(B.updated_at_date)) 
-            and (year(A.created_at_date) = year(B.updated_at_date)))
+        and (month(A.created_at_date) = month(B.updated_at_date)) )
+        --and (year(A.created_at_date) = year(B.updated_at_date)))
     order by created_at_utc_datetime DESC, order_id, product_name
 
 ),
@@ -112,8 +113,8 @@ interm as (
         order_total,
         order_production_costs,
         order_benefits,
-        created_at_date, 
         created_at_utc_datetime,
+        created_at_date, 
         created_at_utc_time,
     from orders_ship_item_prod A
     left join stats B
@@ -137,8 +138,8 @@ final as (
         promo_id, 
         order_shipping_cost,
         order_selling_price,
-        order_total,
         order_production_costs,
+        order_total,
         order_benefits,
         created_at_date, 
         created_at_utc_datetime,
