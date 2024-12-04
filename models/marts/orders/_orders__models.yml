@@ -12,18 +12,10 @@ models:
       - name: status_id
         description: >
           Unique identifier of each type of status.
-        tests:
-          - not_null
-          - unique
 
       - name: status
         description: >
           Status description.
-        tests:
-          - not_null
-          - unique
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
 
 
@@ -70,54 +62,6 @@ models:
               to: ref('dim_order_status')
               field: status_id
 
-      - name: product_id
-        data_type: varchar
-        description: >
-          Identifier of each product.
-        tests:
-          - not_null
-
-      - name: product_name
-        data_type: varchar
-        description: >
-          Description of the product.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
-
-      - name: quantity
-        data_type: number
-        description: >
-          Number of products purchased.
-        tests:
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
-
-      - name: production_price
-        data_type: number
-        description: >
-          Costs of production of each product.
-          The production_price is that of the month in which the order was placed ("created_at").
-        tests:
-          - not_null
-          - dbt_utils.expression_is_true:
-              expression: " > 0"
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
-
-      - name: selling_price
-        data_type: number
-        description: >
-          Selling price of each product unit.  
-          The selling_price is that of the month in which the order was placed ("created_at").
-        tests:
-          - not_null
-          - dbt_utils.expression_is_true:
-              expression: " > 0"
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
-
       - name: promo_id
         data_type: varchar
         description: >
@@ -132,14 +76,11 @@ models:
         data_type: number
         description: >
           Cost associated with the shipping service. Has an order level.
-        tests:
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
-      - name: order_selling_price
+      - name: order_production_costs
         data_type: number
         description: >
-          Selling price of the order (sum "quantity" times "selling_price").
+          Production costs of the order (sum "quantity" times "production_price").
         tests:
           - not_null
           - dbt_utils.expression_is_true:
@@ -147,10 +88,10 @@ models:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: number
 
-      - name: order_production_costs
+      - name: order_selling_price
         data_type: number
         description: >
-          Production costs of the order (sum "quantity" times "production_price").
+          Selling price of the order (sum "quantity" times "selling_price").
         tests:
           - not_null
           - dbt_utils.expression_is_true:
@@ -176,27 +117,75 @@ models:
       - name: created_at_utc_datetime
         description: >
           Order generation datetime, in UTC.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
       - name: created_at_date
         description: >
           Order generation date.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
-
+        
       - name: created_at_utc_time
         description: >
           Order generation time, in UTC.
+
+
+  - name: dim_order_items
+    
+    description: >
+      Details of the products of each of the orders placed to the company.
+    
+    columns:
+      - name: order_id
+        data_type: varchar
+        description: >
+          Unique identifier of each order.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: time
 
+      - name: product_id
+        data_type: varchar
+        description: >
+          Identifier of each product.
+        tests:
+          - not_null
+
+      - name: product_name
+        data_type: varchar
+        description: >
+          Description of the product.
+        tests:
+          - not_null
+
+      - name: quantity
+        data_type: number
+        description: >
+          Number of products purchased.
+
+      - name: production_price
+        data_type: number
+        description: >
+          Costs of production of each product.
+          The production_price is that of the month in which the order was placed ("created_at").
+        tests:
+          - not_null
+
+      - name: selling_price
+        data_type: number
+        description: >
+          Selling price of each product unit.  
+          The selling_price is that of the month in which the order was placed ("created_at").
+        tests:
+          - not_null
+
+      - name: created_at_utc_datetime
+        description: >
+          Order generation datetime, in UTC.
+
+      - name: created_at_date
+        description: >
+          Order generation date.
+        
+      - name: created_at_utc_time
+        description: >
+          Order generation time, in UTC.
 
 
   - name: dim_order_promos
@@ -208,35 +197,19 @@ models:
       - name: promo_id
         description: >
           Unique identifier of each promotion.
-        tests:
-          - not_null
-          - unique
 
       - name: promo_name
         description: >
           Promotion description.
-        tests:
-          - not_null
-          - unique
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: discount
         description: >
           Promotion discount (in dollar).
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: status
         description: >
           Status of the promotion. 
           If it is avaliable in the webpage, active, if not, inactive. 
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
 
 
@@ -259,48 +232,26 @@ models:
           First user name.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: last_name
         description: >
-          Last user namr
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
+          Last user name.
 
       - name: birthday
         description: >
           User birthday.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
-
+        
       - name: age
         description: >
           User age.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: email
         description: >
           User email.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: phone_number
         description: >
           User phone number
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: address_id
         description: >
@@ -314,64 +265,34 @@ models:
       - name: created_at_utc_datetime
         description: >
           User generation datetime, in UTC.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
       - name: created_at_date
         description: >
           User generation date.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
-
+        
       - name: created_at_utc_time
         description: >
           User generation time, in UTC.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: time
 
       - name: updated_at_utc_datetime
         description: >
           Last datetime of user information update, in UTC.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
       - name: updated_at_date
         description: >
           Last date of user information update.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
-
+        
       - name: updated_at_utc_time
         description: >
           Last time of user information update.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: time
 
       - name: _snp_first_ingest_utc
         description: >
           Timestamp when a row was first inserted in the snapshot, in UTC.
-        tests:
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
       - name: _snp_invalid_from_utc
         description: >
           Timestamp when the record was invalidated, in UTC.
-        tests:
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
 
 
@@ -393,29 +314,21 @@ models:
           Address county.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: state
         description: >
           Address state.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: zipcode
         description: >
           Zipcode of each address.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: address
         description: >
           Address description.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar

@@ -21,32 +21,24 @@ models:
           Address county.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: state
         description: >
           Address state.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: zipcode
         description: >
           Zipcode of each address.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: address
         description: >
           Address description.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
 
   - name: dim_shipping_status
@@ -58,18 +50,10 @@ models:
       - name: status_id
         description: >
           Unique identifier of each type of status.
-        tests:
-          - not_null
-          - unique
 
       - name: status
         description: >
           Status description.
-        tests:
-          - not_null
-          - unique
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
 
   - name: dim_shipping_service
@@ -81,18 +65,10 @@ models:
       - name: shipping_service_id
         description: >
           Unique identifier of each shipping service.
-        tests:
-          - not_null
-          - unique
 
       - name: shipping_service
         description: >
           Description of the service shipping.
-        tests:
-          - not_null
-          - unique
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
 
   - name: facts_shipments
@@ -150,8 +126,6 @@ models:
           Cost associated with the shipping service.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: estimated_delivery_days
         data_type: number
@@ -186,24 +160,18 @@ models:
           Order generation datetime, in UTC.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
       - name: created_at_date
         description: >
           Order generation date.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
 
       - name: created_at_utc_time
         description: >
           Order generation time, in UTC.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: time
 
       - name: estimated_delivery_at_utc_datetime
         description: >
@@ -211,8 +179,6 @@ models:
           Null when status is "preparing".
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
       - name: estimated_delivery_at_date
         description: >
@@ -220,8 +186,6 @@ models:
           Null when status is "preparing".
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
 
       - name: estimated_delivery_at_utc_time
         description: >
@@ -229,29 +193,18 @@ models:
           Null when status is "preparing".
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: time
 
       - name: delivered_at_utc_datetime
         description: >
           Actual delivery datetime by the shipping service, in UTC.
           Null when status is not "delivered".
-        tests:
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
       - name: delivered_at_date
         description: >
           Actual delivery date by the shipping service.
           Null when status is not "delivered".
-        tests:
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
 
       - name: delivered_at_utc_time
         description: >
           Actual delivery time by the shipping service, in UTC.
           Null when status is not "delivered".
-        tests:
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: time

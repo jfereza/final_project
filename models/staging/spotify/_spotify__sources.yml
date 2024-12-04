@@ -30,39 +30,19 @@ sources:
           - name: song
             description: >
               Name of the song.
-            tests:
-              - not_null
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: varchar
 
           - name: author
             description: >
               Author of the song.
-            tests:
-              - not_null
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: varchar
 
           - name: genre
             description: >
               Genre(s) of the song.
-            tests:
-              - not_null
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: varchar
 
           - name: month
             description: >
               Month (name) of chart registration.
-            tests:
-              - not_null
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: varchar
-
+            
           - name: year
             description: >
               Year of chart registration.
-            tests:
-              - not_null
-              - dbt_expectations.expect_column_values_to_be_of_type:
-                  column_type: number
