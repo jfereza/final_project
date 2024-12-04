@@ -12,7 +12,7 @@ source as (
 
 ),
 
-final as (
+interm as (
 
     select
         order_id,
@@ -22,10 +22,30 @@ final as (
             end as shipping_service_id, 
         shipping_cost,
         tracking_id,
-        estimated_delivery_at_utc,
-        delivered_at_utc
-    from 
-        source
+        estimated_delivery_at_utc_datetime, 
+        estimated_delivery_at_date, 
+        estimated_delivery_at_utc_time,
+        delivered_at_utc_datetime, 
+        delivered_at_date, 
+        delivered_at_utc_time,
+    from source
+
+),
+
+final as (
+
+    select
+        order_id,
+        shipping_service_id, 
+        shipping_cost,
+        tracking_id,
+        estimated_delivery_at_utc_datetime, 
+        estimated_delivery_at_date, 
+        estimated_delivery_at_utc_time,
+        delivered_at_utc_datetime, 
+        delivered_at_date, 
+        delivered_at_utc_time
+    from interm
 
 )
 

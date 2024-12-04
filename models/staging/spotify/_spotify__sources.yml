@@ -1,0 +1,68 @@
+version: 2
+
+sources:
+  - name: spotify # name of the source
+    schema: spotify # this is the schema our raw data lives in
+    database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE" # this is the name of our database
+
+    quoting: # al estar todo en falso no es case_sensitive. Si se pone en true si lo será para cada campo
+      database: false
+      schema: false
+      identifier: false
+
+    tables:
+      - name: top10_genres
+
+        description: >
+          USA songs chart for every week from 2022/01/01 up to 2024/11/30.
+        
+        columns:
+          - name: top
+            description: >
+              Chart position of the song.
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: " >= 1"
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: number
+
+          - name: song
+            description: >
+              Name of the song.
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: varchar
+
+          - name: author
+            description: >
+              Author of the song.
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: varchar
+
+          - name: genre
+            description: >
+              Genre(s) of the song.
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: varchar
+
+          - name: month
+            description: >
+              Month (name) of chart registration.
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: varchar
+
+          - name: year
+            description: >
+              Year of chart registration.
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: number

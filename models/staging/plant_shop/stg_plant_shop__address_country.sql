@@ -20,12 +20,21 @@ interm as (
 
 ),
 
-final as (
+interm2 as (
 
     select
         country,
         {{ dbt_utils.generate_surrogate_key(['country']) }} as country_id
     from interm
+
+),
+
+final as (
+
+    select
+        country,
+        country_id
+    from interm2
 
 )
 

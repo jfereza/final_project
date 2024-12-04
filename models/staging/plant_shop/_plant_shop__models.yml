@@ -58,6 +58,63 @@ models:
       - name: _fivetran_deleted
         description: >
           fivetran_deleted
+
+
+
+  - name: base_plant_shop__budget
+
+    description: >
+          Budget for each product and month.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - product_id
+            - updated_at_date
+    
+    columns:
+      - name: product_id
+        description: >
+          Unique identifier of each product.
+        tests:
+          - not_null
+
+      - name: quantity
+        description: >
+          Number of products sold in a given month.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: updated_at_date
+        description: >
+          Date in which the budget has been calculated for.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: _snp_first_ingest_utc
+        description: >
+          Timestamp when a row was first inserted in the snapshot, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _snp_invalid_from_utc
+        description: >
+          Timestamp when the record was invalidated, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _fivetran_synced_utc
+        description: >
+          fivetran_synced, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
               
 
               
@@ -92,13 +149,29 @@ models:
               to: ref('base_plant_shop__addresses')
               field: address_id
 
-      - name: created_at_utc
+      - name: created_at_utc_datetime
         description: >
           Order generation datetime, in UTC.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: Timestamp_TZ
+
+      - name: created_at_date
+        description: >
+          Order generation date.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: created_at_utc_time
+        description: >
+          Order generation time, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
 
       - name: order_cost
         description: >
@@ -139,21 +212,53 @@ models:
           Shipping tracking id.
           Null when status is "preparing".
 
-      - name: estimated_delivery_at_utc
+      - name: estimated_delivery_at_utc_datetime
         description: >
-          Delivery time estimated by the shipping service, in UTC.
+          Delivery datetime estimated by the shipping service, in UTC.
           Null when status is "preparing".
         tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: Timestamp_TZ
 
-      - name: delivered_at_utc
+      - name: estimated_delivery_at_date
+        description: >
+          Delivery date estimated by the shipping service.
+          Null when status is "preparing".
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: estimated_delivery_at_utc_time
+        description: >
+          Delivery time estimated by the shipping service, in UTC.
+          Null when status is "preparing".
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
+
+      - name: delivered_at_utc_datetime
+        description: >
+          Actual delivery datetime by the shipping service, in UTC.
+          Null when status is not "delivered".
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: delivered_at_date
+        description: >
+          Actual delivery date by the shipping service.
+          Null when status is not "delivered".
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: delivered_at_utc_time
         description: >
           Actual delivery time by the shipping service, in UTC.
           Null when status is not "delivered".
         tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
+              column_type: time
 
       - name: promo_id
         description: >
@@ -176,6 +281,261 @@ models:
       - name: _fivetran_synced_utc
         description: >
           fivetran_synced in UTC
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _fivetran_deleted
+        description: >
+          fivetran_deleted
+
+
+  - name: base_plant_shop__products
+    
+    description: >
+      All our products information for every month.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - product_id
+            - updated_at_date
+    
+    columns:
+      - name: product_id
+        description: >
+          Unique identifier of each product.
+        tests:
+          - not_null
+
+      - name: production_price
+        description: >
+          Costs of production of each product.
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: " > 0"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: selling_price
+        description: >
+          Selling price of each product unit.
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: " > 0"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: product_name
+        description: >
+          Description of the product.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: inventory
+        description: >
+          Product inventory.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: " >= 0"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: updated_at_utc_datetime
+        description: >
+          Last datetime of user information update, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: updated_at_date
+        description: >
+          Last date of user information update.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: updated_at_utc_time
+        description: >
+          Last time of user information update, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
+
+      - name: _snp_first_ingest_utc
+        description: >
+          Timestamp when a row was first inserted in the snapshot, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _snp_invalid_from_utc
+        description: >
+          Timestamp when the record was invalidated, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _fivetran_synced_utc
+        description: >
+          fivetran_synced in UTC
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _fivetran_deleted
+        description: >
+          fivetran_deleted
+
+
+
+  - name: base_plant_shop__users
+   
+    description: >
+      Users information, including changes.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - user_id
+            - updated_at_date
+    
+    columns:
+      - name: user_id
+        description: >
+          Unique identifier of each user.
+        tests:
+          - not_null
+
+      - name: first_name
+        description: >
+          First user name.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: last_name
+        description: >
+          Last user namr
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: birthday
+        description: >
+          User birthday.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: age
+        description: >
+          User age.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: email
+        description: >
+          User email.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: phone_number
+        description: >
+          User phone number
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: address_id
+        description: >
+          Identifier of the address associated with the user.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_plant_shop__addresses')
+              field: address_id
+
+      - name: created_at_utc_datetime
+        description: >
+          User generation datetime, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: created_at_date
+        description: >
+          User generation date.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: created_at_utc_time
+        description: >
+          User generation time, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
+
+      - name: updated_at_utc_datetime
+        description: >
+          Last datetime of user information update, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: updated_at_date
+        description: >
+          Last date of user information update.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: updated_at_utc_time
+        description: >
+          Last time of user information update.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
+
+      - name: _snp_first_ingest_utc
+        description: >
+          Timestamp when a row was first inserted in the snapshot, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _snp_invalid_from_utc
+        description: >
+          Timestamp when the record was invalidated, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _fivetran_synced_utc
+        description: >
+          fivetran_synced, in UTC.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_of_type:
@@ -301,7 +661,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - product_id
-            - updated_at
+            - updated_at_date
     
     columns:
       - name: product_id
@@ -318,9 +678,61 @@ models:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: number
 
-      - name: updated_at
+      - name: updated_at_date
         description: >
-          Month in which the budget has been calculated for.
+          Date in which the budget has been calculated for.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: _snp_first_ingest_utc
+        description: >
+          Timestamp when a row was first inserted in the snapshot, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _snp_invalid_from_utc
+        description: >
+          Timestamp when the record was invalidated, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _fivetran_synced_utc
+        description: >
+          fivetran_synced, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+              
+              
+  - name: stg_plant_shop__budget_last_update
+
+    description: >
+          Budget for each product for the current month.
+    
+    columns:
+      - name: product_id
+        description: >
+          Unique identifier of each product.
+        tests:
+          - not_null
+          - unique
+
+      - name: quantity
+        description: >
+          Number of products sold in a given month.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: updated_at_date
+        description: >
+          Date in which the budget has been calculated for.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_of_type:
@@ -425,13 +837,29 @@ models:
               to: ref('stg_plant_shop__addresses')
               field: address_id
 
-      - name: created_at_utc
+      - name: created_at_utc_datetime
         description: >
           Order generation datetime, in UTC.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: Timestamp_TZ
+
+      - name: created_at_date
+        description: >
+          Order generation date.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: created_at_utc_time
+        description: >
+          Order generation time, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
 
       - name: order_cost
         description: >
@@ -487,7 +915,12 @@ models:
   - name: stg_plant_shop__products
     
     description: >
-      All our products.
+      All our products information for every month.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - product_id
+            - updated_at_date
     
     columns:
       - name: product_id
@@ -533,14 +966,130 @@ models:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: number
 
-      - name: updated_at_utc
+      - name: updated_at_utc_datetime
         description: >
           Last datetime of user information update, in UTC.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_in_type_list:
-              column_type_list:
-                [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: updated_at_date
+        description: >
+          Last date of user information update.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: updated_at_utc_time
+        description: >
+          Last time of user information update, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
+
+      - name: _snp_first_ingest_utc
+        description: >
+          Timestamp when a row was first inserted in the snapshot, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _snp_invalid_from_utc
+        description: >
+          Timestamp when the record was invalidated, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _fivetran_synced_utc
+        description: >
+          fivetran_synced in UTC
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _fivetran_deleted
+        description: >
+          fivetran_deleted
+
+
+  - name: stg_plant_shop__products_last_update
+    
+    description: >
+      All our products information for the current month.
+    
+    columns:
+      - name: product_id
+        description: >
+          Unique identifier of each product.
+        tests:
+          - not_null
+          - unique
+
+      - name: production_price
+        description: >
+          Costs of production of each product.
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: " > 0"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: selling_price
+        description: >
+          Selling price of each product unit.
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: " > 0"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: product_name
+        description: >
+          Description of the product.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: inventory
+        description: >
+          Product inventory.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: " >= 0"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: updated_at_utc_datetime
+        description: >
+          Last datetime of user information update, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: updated_at_date
+        description: >
+          Last date of user information update.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: updated_at_utc_time
+        description: >
+          Last time of user information update, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
 
       - name: _snp_first_ingest_utc
         description: >
@@ -658,19 +1207,53 @@ models:
         description: >
           Tracking id of each order.
 
-      - name: estimated_delivery_at_utc
+      - name: estimated_delivery_at_utc_datetime
         description: >
-          Delivery time estimated by the shipping service, in UTC.
+          Delivery datetime estimated by the shipping service, in UTC.
+          Null when status is "preparing".
         tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: Timestamp_TZ
 
-      - name: delivered_at_utc
+      - name: estimated_delivery_at_date
         description: >
-          Actual delivery time by the shipping service.
+          Delivery date estimated by the shipping service.
+          Null when status is "preparing".
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: estimated_delivery_at_utc_time
+        description: >
+          Delivery time estimated by the shipping service, in UTC.
+          Null when status is "preparing".
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
+
+      - name: delivered_at_utc_datetime
+        description: >
+          Actual delivery datetime by the shipping service, in UTC.
+          Null when status is not "delivered".
         tests:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: Timestamp_TZ
+
+      - name: delivered_at_date
+        description: >
+          Actual delivery date by the shipping service.
+          Null when status is not "delivered".
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: delivered_at_utc_time
+        description: >
+          Actual delivery time by the shipping service, in UTC.
+          Null when status is not "delivered".
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
         
 
   - name: stg_plant_shop__shipping_service
@@ -724,7 +1307,12 @@ models:
   - name: stg_plant_shop__users
    
     description: >
-      Users information.
+      Users information, including changes.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - user_id
+            - updated_at_date
     
     columns:
       - name: user_id
@@ -757,6 +1345,14 @@ models:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: date
 
+      - name: age
+        description: >
+          User age.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
       - name: email
         description: >
           User email.
@@ -782,7 +1378,7 @@ models:
               to: ref('stg_plant_shop__addresses')
               field: address_id
 
-      - name: created_at_utc
+      - name: created_at_utc_datetime
         description: >
           User generation datetime, in UTC.
         tests:
@@ -790,13 +1386,191 @@ models:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: Timestamp_TZ
 
-      - name: updated_at_utc
+      - name: created_at_date
         description: >
-          Last datetime of user information update.
+          User generation date.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: created_at_utc_time
+        description: >
+          User generation time, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
+
+      - name: updated_at_utc_datetime
+        description: >
+          Last datetime of user information update, in UTC.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: Timestamp_TZ
+
+      - name: updated_at_date
+        description: >
+          Last date of user information update.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: updated_at_utc_time
+        description: >
+          Last time of user information update.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
+
+      - name: _snp_first_ingest_utc
+        description: >
+          Timestamp when a row was first inserted in the snapshot, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _snp_invalid_from_utc
+        description: >
+          Timestamp when the record was invalidated, in UTC.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _fivetran_synced_utc
+        description: >
+          fivetran_synced, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: _fivetran_deleted
+        description: >
+          fivetran_deleted
+
+
+
+  - name: stg_plant_shop__users_last_update
+   
+    description: >
+      Most recent users information.
+    
+    columns:
+      - name: user_id
+        description: >
+          Unique identifier of each user.
+        tests:
+          - not_null
+          - unique
+
+      - name: first_name
+        description: >
+          First user name.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: last_name
+        description: >
+          Last user namr
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: birthday
+        description: >
+          User birthday.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: age
+        description: >
+          User age.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: email
+        description: >
+          User email.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: phone_number
+        description: >
+          User phone number
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: address_id
+        description: >
+          Identifier of the address associated with the user.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_plant_shop__addresses')
+              field: address_id
+
+      - name: created_at_utc_datetime
+        description: >
+          User generation datetime, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: created_at_date
+        description: >
+          User generation date.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: created_at_utc_time
+        description: >
+          User generation time, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
+
+      - name: updated_at_utc_datetime
+        description: >
+          Last datetime of user information update, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: updated_at_date
+        description: >
+          Last date of user information update.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: updated_at_utc_time
+        description: >
+          Last time of user information update.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
 
       - name: _snp_first_ingest_utc
         description: >

@@ -21,6 +21,7 @@ sources:
         description: >
           Budget for each product and month.
 
+        columns:
           - name: product_id
             description: >
               Unique identificator of each product.

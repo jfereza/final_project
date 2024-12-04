@@ -6,7 +6,6 @@ snapshots:
 
     description: >
       Snapshot of budget for each product and month.
-
       - name: product_id
         description: >
           Unique identificator of each product.

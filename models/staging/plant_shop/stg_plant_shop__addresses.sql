@@ -12,7 +12,7 @@ source as (
 
 ),
 
-final as (
+interm as (
 
     select
         address_id,
@@ -24,6 +24,19 @@ final as (
         _fivetran_deleted
     from source
 
-)
+),
 
+final as (
+
+    select
+        address_id,
+        country_id, 
+        state_id, 
+        zipcode,
+        address, 
+        _fivetran_synced_utc, 
+        _fivetran_deleted
+    from interm
+
+)
 select * from final

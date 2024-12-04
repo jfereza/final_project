@@ -23,13 +23,23 @@ iterm as (
 
 ),
 
-final as (
+interm2 as (
 
     select
         {{ dbt_utils.generate_surrogate_key(['shipping_service']) }} as shipping_service_id,
         shipping_service
     from 
         iterm 
+
+),
+
+final as (
+
+    select
+        shipping_service_id,
+        shipping_service
+    from 
+        interm2 
 
 )
 
