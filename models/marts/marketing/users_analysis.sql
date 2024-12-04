@@ -96,8 +96,8 @@ stats2 as ( -- calculamos algunas estadisticas
 
     select 
         user_id,
-        max(spent_each_order) as max_spent_each_order,
-        min(spent_each_order) as min_spent_each_order,        
+        max(spent_each_order) as max_spent_order,
+        min(spent_each_order) as min_spent_order,        
         avg(spent_each_order) as mean_spent_each_order,
         median(spent_each_order) as median_spent_each_order
     from stats1
@@ -154,8 +154,8 @@ interm as (
         created_at_utc_datetime,
         created_at_date, 
         created_at_utc_time, 
-        coalesce(B.max_spent_each_order, 0)::decimal(14,3) as max_spent_each_order,
-        coalesce(B.min_spent_each_order, 0)::decimal(14,3) as min_spent_each_order,
+        coalesce(B.max_spent_order, 0)::decimal(14,3) as max_spent_order,
+        coalesce(B.min_spent_order, 0)::decimal(14,3) as min_spent_order,
         coalesce(B.mean_spent_each_order, 0)::decimal(14,3) as mean_spent_each_order,
         coalesce(B.median_spent_each_order, 0)::decimal(14,3) as median_spent_each_order,
         coalesce(C.tot_num_plants, 0)::int as tot_num_plants,
@@ -192,8 +192,8 @@ final as (
         created_at_utc_datetime,
         created_at_date, 
         created_at_utc_time, 
-        max_spent_each_order,
-        min_spent_each_order,
+        max_spent_order,
+        min_spent_order,
         mean_spent_each_order,
         median_spent_each_order,
         tot_num_plants,

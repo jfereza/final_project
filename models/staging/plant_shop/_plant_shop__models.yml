@@ -80,7 +80,7 @@ models:
 
       - name: quantity
         description: >
-          Number of products sold in a given month.
+          Estimate of number of products sold in a given month.
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_of_type:
@@ -173,9 +173,9 @@ models:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: time
 
-      - name: order_cost
+      - name: order_selling_price
         description: >
-          Cost of the order (sum product units times product selling price).
+          Selling price of the order (sum product units times product selling price).
         tests:
           - not_null
           - dbt_utils.expression_is_true:
@@ -270,7 +270,7 @@ models:
 
       - name: order_total
         description: >
-          Total benefits of the order (order_cost - shipping_cost - discount). 
+          Gross benefits of the order (order_selling_price - shipping_cost - discount). 
           Null when status is "preparing".
         tests:
           - dbt_utils.expression_is_true:
@@ -320,7 +320,7 @@ models:
 
       - name: selling_price
         description: >
-          Selling price of each product unit.
+          Selling price of each product unit every month.
         tests:
           - not_null
           - dbt_utils.expression_is_true:
@@ -861,9 +861,9 @@ models:
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: time
 
-      - name: order_cost
+      - name: order_selling_price
         description: >
-          Cost of the order (sum product units times product selling price).
+          Selling price of the order (sum product units times product selling price).
         tests:
           - not_null
           - dbt_utils.expression_is_true:
@@ -891,7 +891,7 @@ models:
 
       - name: order_total
         description: >
-          Total benefits of the order (order_cost - shipping_cost - discount). 
+          Gross benefits of the order (order_selling_price - shipping_cost - discount). 
           Null when status is "preparing".
         tests:
           - dbt_utils.expression_is_true:
@@ -941,7 +941,7 @@ models:
 
       - name: selling_price
         description: >
-          Selling price of each product unit.
+          Selling price of each product unit for every month.
         tests:
           - not_null
           - dbt_utils.expression_is_true:
@@ -1042,7 +1042,7 @@ models:
 
       - name: selling_price
         description: >
-          Selling price of each product unit.
+          Last update of the selling price of each product unit.
         tests:
           - not_null
           - dbt_utils.expression_is_true:
@@ -1206,6 +1206,7 @@ models:
       - name: tracking_id
         description: >
           Tracking id of each order.
+          Null when status is "preparing".
 
       - name: estimated_delivery_at_utc_datetime
         description: >

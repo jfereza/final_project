@@ -24,10 +24,12 @@ shipp_info_s as (
 
 ),
 
-orders as ( -- seleccionamos solo los orders que estan con status = shipped o delivered
+orders as ( -- cruzamos orders_is con status_id
 
     select
         order_id,
+        A.status_id as status_id,
+        status,
         address_id,
         created_at_utc_datetime, 
         created_at_date, 
@@ -35,7 +37,6 @@ orders as ( -- seleccionamos solo los orders que estan con status = shipped o de
     from orders_s A
     left join status_s B
         on A.status_id = B.status_id
-    where status != 'preparing' 
 
 ),
 
@@ -43,6 +44,8 @@ interm as ( -- cruzamos los orders_id (de orders shipped o deliveredorders) con 
 
     select
         A.order_id as order_id,
+        status_id,
+        status,
         address_id,
         tracking_id,
         shipping_service_id, 
@@ -62,10 +65,11 @@ interm as ( -- cruzamos los orders_id (de orders shipped o deliveredorders) con 
 
 ),
 
-interm2 as ( -- añadimos algunas columnas 
+interm2 as ( -- añadimos algunas columnas y seleccionamos solo orders enviados
 
     select
         order_id,
+        status_id,
         address_id,
         tracking_id,
         shipping_service_id, 
@@ -83,6 +87,7 @@ interm2 as ( -- añadimos algunas columnas
         delivered_at_date, 
         delivered_at_utc_time
     from  interm
+    where status != 'preparing' 
 
 ),
 
@@ -90,6 +95,7 @@ final as (
 
     select
         order_id,
+        status_id,
         address_id,
         tracking_id,
         shipping_service_id, 

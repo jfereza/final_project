@@ -1,0 +1,67 @@
+
+version: 2
+
+models:
+  - name: dim_time
+    
+    description: >
+      Time dimension. 
+      Covers all daily dates from 20221/1 to 2024/12/31.
+    
+    columns:
+      - name: date
+        data_type: date
+        description: >
+          Date in YYYY/MM/DD format.
+
+      - name: year
+        data_type: number
+        description: >
+          Year.
+
+      - name: month
+        data_type: number
+        description: >
+          Month (number).
+
+      - name: month_name
+        data_type: varchar
+        description: >
+          Month (name).
+
+      - name: day
+        data_type: number
+        description: >
+          Day.
+
+      - name: quarter
+        data_type: number
+        description: >
+          Quarter of the year to which the date corresponds.
+          Month (1,2,3), (4,5,6), (7,8,9) and (10,11,12) corresponds to quarter 1,2,3 and 4.
+
+      - name: day_of_week
+        data_type: number
+        description: >
+          Day of the week (number) to which the date corresponds.
+
+      - name: day_of_week_name
+        data_type: varchar
+        description: >
+          Day of the week (name) to which the date corresponds.
+
+      - name: fiscal_quarter
+        data_type: varchar
+        description: >
+          Fiscal quarter of the year to which the date corresponds.
+          Month (12,1,2), (3,4,5), (6,7,8) and (9,10,11) corresponds to fiscal quarter 1,2,3 and 4.
+
+      - name: week
+        data_type: number
+        description: >
+          Week of the year to which the date corresponds.
+
+      - name: day_of_year
+        data_type: number
+        description: >
+          Day of the year to which the date corresponds.

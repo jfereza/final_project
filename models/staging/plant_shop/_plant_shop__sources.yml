@@ -183,7 +183,7 @@ sources:
               
           - name: order_cost
             description: >
-              Cost of the order (sum product units times product price).
+              Selling price of the order (sum product units times product price).
             tests:
               - not_null
               - dbt_utils.expression_is_true:
@@ -202,7 +202,7 @@ sources:
                   
           - name: order_total
             description: >
-              Total benefits of the order (order_cost - shipping_cost - discount). 
+              Gross benefits of the order (order_cost - shipping_cost - discount). 
               Null when status is "preparing".
             tests:
               - dbt_utils.expression_is_true:
@@ -316,7 +316,7 @@ sources:
 
           - name: price
             description: >
-              Slleing price of each product unit.
+              Selling price of each product unit for every month.
             tests:
               - not_null
               - dbt_utils.expression_is_true:

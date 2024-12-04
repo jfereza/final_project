@@ -1,0 +1,256 @@
+
+version: 2
+
+models:
+
+  - name: dim_shipping_addresses
+    
+    description: >
+      Information on the destination address of each shipment.
+    
+    columns:
+      - name: address_id
+        description: >
+          Unique identifier for each address.
+        tests:
+          - not_null
+
+      - name: country
+        description: >
+          Address county.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: state
+        description: >
+          Address state.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: zipcode
+        description: >
+          Zipcode of each address.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: address
+        description: >
+          Address description.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+
+  - name: dim_shipping_status
+    
+    description: >
+      Status of the orders.
+    
+    columns:
+      - name: status_id
+        description: >
+          Unique identifier of each type of status.
+        tests:
+          - not_null
+          - unique
+
+      - name: status
+        description: >
+          Status description.
+        tests:
+          - not_null
+          - unique
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+
+  - name: dim_shipping_service
+    
+    description: >
+      Information about the shipping services. 
+    
+    columns:
+      - name: shipping_service_id
+        description: >
+          Unique identifier of each shipping service.
+        tests:
+          - not_null
+          - unique
+
+      - name: shipping_service
+        description: >
+          Description of the service shipping.
+        tests:
+          - not_null
+          - unique
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+
+  - name: facts_shipments
+    
+    description: >
+      Record of each of the shipments made by the company.
+    
+    columns:
+      - name: order_id
+        description: >
+          Unique identifier of each order.
+        tests:
+          - not_null
+          - unique
+
+      - name: status_id
+        description: >
+          Identifier of the order status.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_shipping_status')
+              field: status_id
+
+      - name: address_id
+        data_type: varchar
+        description: >
+          Identifier of the shipping address.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_plant_shop__addresses')
+              field: address_id
+
+      - name: tracking_id
+        data_type: varchar
+        description: >
+          Tracking id of each order.
+        tests:
+          - not_null
+
+      - name: shipping_service_id
+        data_type: varchar
+        description: >
+          Identifier of the shipping service.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_shipping_service')
+              field: shipping_service_id
+
+      - name: shipping_cost
+        data_type: number
+        description: >
+          Cost associated with the shipping service.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: estimated_delivery_days
+        data_type: number
+        description: >
+          Estimated days between order creation and delivery
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: real_delivery_days
+        data_type: number
+        description: >
+          Real days between order creation and delivery. 
+          It is null when the package has not yet been received.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: dif_estimated_real_delivery_days
+        data_type: number
+        description: >
+          Difference between estimated and real days between order creation and delivery.
+          Negative number means "estimated_delivery_days" are less than "real_delivery_days". Positive the oppostive.
+          It is null when the package has not yet been received.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: number
+
+      - name: created_at_utc_datetime
+        description: >
+          Order generation datetime, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: created_at_date
+        description: >
+          Order generation date.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: created_at_utc_time
+        description: >
+          Order generation time, in UTC.
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
+
+      - name: estimated_delivery_at_utc_datetime
+        description: >
+          Delivery datetime estimated by the shipping service, in UTC.
+          Null when status is "preparing".
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: estimated_delivery_at_date
+        description: >
+          Delivery date estimated by the shipping service.
+          Null when status is "preparing".
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: estimated_delivery_at_utc_time
+        description: >
+          Delivery time estimated by the shipping service, in UTC.
+          Null when status is "preparing".
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
+
+      - name: delivered_at_utc_datetime
+        description: >
+          Actual delivery datetime by the shipping service, in UTC.
+          Null when status is not "delivered".
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: Timestamp_TZ
+
+      - name: delivered_at_date
+        description: >
+          Actual delivery date by the shipping service.
+          Null when status is not "delivered".
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+      - name: delivered_at_utc_time
+        description: >
+          Actual delivery time by the shipping service, in UTC.
+          Null when status is not "delivered".
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: time
