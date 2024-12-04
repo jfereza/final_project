@@ -299,7 +299,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - product_id
-            - updated_at_date
+            - updated_at_utc_datetime
     
     columns:
       - name: product_id
@@ -405,7 +405,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - user_id
-            - updated_at_date
+            - updated_at_utc_datetime
     
     columns:
       - name: user_id
@@ -920,7 +920,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - product_id
-            - updated_at_date
+            - updated_at_utc_datetime
     
     columns:
       - name: product_id
@@ -1313,7 +1313,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - user_id
-            - updated_at_date
+            - updated_at_utc_datetime
     
     columns:
       - name: user_id
