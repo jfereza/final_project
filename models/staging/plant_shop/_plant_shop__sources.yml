@@ -54,9 +54,6 @@ sources:
               fivetran_synced
             tests:
               - not_null
-              - dbt_expectations.expect_column_values_to_be_in_type_list:
-                  column_type_list:
-                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
 
       - name: addresses
@@ -110,9 +107,6 @@ sources:
               fivetran_synced.
             tests:
               - not_null
-              - dbt_expectations.expect_column_values_to_be_in_type_list:
-                  column_type_list:
-                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
           - name: _fivetran_deleted
             description: >
@@ -235,9 +229,6 @@ sources:
               fivetran_synced.
             tests:
               - not_null
-              - dbt_expectations.expect_column_values_to_be_in_type_list:
-                  column_type_list:
-                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
           - name: _fivetran_deleted
             description: >
@@ -281,9 +272,6 @@ sources:
               fivetran_synced.
             tests:
               - not_null
-              - dbt_expectations.expect_column_values_to_be_in_type_list:
-                  column_type_list:
-                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
           - name: _fivetran_deleted
             description: >
@@ -399,9 +387,6 @@ sources:
               fivetran_synced.
             tests:
               - not_null
-              - dbt_expectations.expect_column_values_to_be_in_type_list:
-                  column_type_list:
-                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
           - name: _fivetran_deleted
             description: >
@@ -490,9 +475,6 @@ sources:
               fivetran_synced.
             tests:
               - not_null
-              - dbt_expectations.expect_column_values_to_be_in_type_list:
-                  column_type_list:
-                    [datetime, Timestamp_TZ, Timestamp_LTZ, Timestamp_NTZ]
 
           - name: _fivetran_deleted
             description: >

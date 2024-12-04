@@ -48,8 +48,7 @@ orders_item as ( -- cruzamos orders con order_items (para product_id y quantity.
         created_at_date, 
         created_at_utc_time, 
         address_id,
-        promo_id, 
-        order_total
+        promo_id
     from orders_s A
     left join order_items_s B
         on A.order_id = B.order_id
@@ -71,8 +70,7 @@ orders_quantit_price as ( -- cruzamos ordero+order_items con products (para name
         created_at_date, 
         created_at_utc_time, 
         address_id,
-        promo_id, 
-        order_total
+        promo_id
     from orders_item A
     left join products_s B
         on ((A.product_id = B.product_id) 

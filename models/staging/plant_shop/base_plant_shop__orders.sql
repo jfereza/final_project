@@ -19,7 +19,6 @@ interm as (
         user_id,
         address_id,
         convert_timezone('UTC', created_at) as created_at_utc, -- convierto la zona horaria
-        order_cost::decimal(14,3) as order_selling_price,  -- dejo 3 decimales
         lower(status) as status, -- pongo los status en minusculas
         nullif(trim(shipping_service), '') as shipping_service, -- cambio los vacios o espacios por null
         shipping_cost::decimal(14,3) as shipping_cost,  -- dejo 3 decimales
@@ -31,7 +30,6 @@ interm as (
             when nullif(trim(promo_id), '') is null then 'no discount' 
             else lower(promo_id)
             end as promo_id, 
-        order_total::decimal(14,3) as order_total,  -- dejo 3 decimales
         convert_timezone('UTC', _fivetran_synced) as _fivetran_synced_utc, -- convierto la zona horaria
         _fivetran_deleted
     from source
@@ -47,7 +45,6 @@ interm2 as (
         created_at_utc as created_at_utc_datetime, 
         date(created_at_utc) as created_at_date, 
         time(created_at_utc) as created_at_utc_time,
-        order_selling_price,  
         status, 
         shipping_service, 
         shipping_cost,  
@@ -59,7 +56,6 @@ interm2 as (
         date(delivered_at_utc) as delivered_at_date, 
         time(delivered_at_utc) as delivered_at_utc_time,
         promo_id, 
-        order_total, 
         _fivetran_synced_utc, 
         _fivetran_deleted
     from interm
@@ -75,7 +71,6 @@ final as (
         created_at_utc_datetime, 
         created_at_date, 
         created_at_utc_time,
-        order_selling_price,  
         status, 
         shipping_service, 
         shipping_cost,  
@@ -87,7 +82,6 @@ final as (
         delivered_at_date, 
         delivered_at_utc_time,
         promo_id, 
-        order_total, 
         _fivetran_synced_utc, 
         _fivetran_deleted
     from interm2

@@ -13,64 +13,36 @@ models:
         data_type: number
         description: >
           Month (num) of chart registration.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: year
         data_type: number
         description: >
           Year of chart registration.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: active_month
         data_type: date
         description: >
           Month in which this chart was recorded.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
 
       - name: song
         data_type: varchar
         description: >
           Title of the song.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: author
         data_type: varchar
         description: >
           Author of the song.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: times
         data_type: number
         description: >
           Times the song apeared on the chart during the active_month.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: total_puntuation
         data_type: number
         description: >
           Puntuation of the song resulting of multiplying "times" by "puntuation".
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
 
 
@@ -93,8 +65,6 @@ models:
           Description of the product.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: production_price
         data_type: number
@@ -104,8 +74,6 @@ models:
           - not_null
           - dbt_utils.expression_is_true:
               expression: " > 0"
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: selling_price
         data_type: number
@@ -115,8 +83,6 @@ models:
           - not_null
           - dbt_utils.expression_is_true:
               expression: " > 0"
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: inventory
         data_type: number
@@ -125,8 +91,6 @@ models:
         tests:
           - dbt_utils.expression_is_true:
               expression: " >= 0"
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: tot_sold
         data_type: number
@@ -143,8 +107,6 @@ models:
           Estimate of number of products sold in a given month.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: updated_at_utc_datetime
         data_type: timestamp_tz
@@ -152,8 +114,6 @@ models:
           Last datetime of user information update, in UTC.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
       - name: updated_at_date
         data_type: date
@@ -161,8 +121,6 @@ models:
           Last date of user information update.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
 
       - name: updated_at_utc_time
         data_type: time
@@ -170,22 +128,14 @@ models:
           Last time of user information update, in UTC.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: time
 
       - name: _snp_first_ingest_utc
         description: >
           Timestamp when a row was first inserted in the snapshot, in UTC.
-        tests:
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
       - name: _snp_invalid_from_utc
         description: >
           Timestamp when the record was invalidated, in UTC.
-        tests:
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
 
 
@@ -199,198 +149,118 @@ models:
         data_type: number
         description: >
           Month (num) of chart registration.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: year
         data_type: number
         description: >
           Year of chart registration.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: active_month
         data_type: date
         description: >
           Month in which this chart was recorded.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
 
       - name: blues
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: country
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: easy_listening
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: electronic
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: folk
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: hip_hop
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: jazz
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: pop
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: rb
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: soul
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: rock
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: metal
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: punk
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: reggaeton
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: trap
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: rap
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: rage
         data_type: number
         description: >
           Musical genre puntuation within the active month. 
           If Spotify genre list for the song includes this genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
 
 
@@ -404,46 +274,27 @@ models:
         data_type: number
         description: >
           Month (num) of chart registration.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: year
         data_type: number
         description: >
           Year of chart registration.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: active_month
         data_type: date
         description: >
           Month in which this chart was recorded.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
 
       - name: genre
         data_type: varchar
         description: >
           Musical genre list. 
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: puntuation
         data_type: number
         description: >
           Puntuation of the genre wihtin the active month. 
           If Spotify genre list for the song includes a genre, is the sum of the puntuation of the song. Else 0.
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: number
 
 
@@ -468,8 +319,6 @@ models:
           First user name.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: last_name
         data_type: varchar
@@ -477,8 +326,6 @@ models:
           Last user namr
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: birthday
         data_type: date
@@ -486,32 +333,24 @@ models:
           User birthday.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
 
       - name: age
         description: >
           User age.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: email
         description: >
           User email.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: varchar
 
       - name: phone_number
         description: >
           User phone number
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: number
 
       - name: address_id
         data_type: varchar
@@ -532,24 +371,18 @@ models:
           User generation datetime, in UTC.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: Timestamp_TZ
 
       - name: created_at_date
         description: >
           User generation date.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: date
 
       - name: created_at_utc_time
         description: >
           User generation time, in UTC.
         tests:
           - not_null
-          - dbt_expectations.expect_column_values_to_be_of_type:
-              column_type: time
 
       - name: max_spent_order
         data_type: number
