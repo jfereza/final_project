@@ -2,9 +2,9 @@
   config(
     materialized='table',
     pre_hook=[
-      "UPDATE {{ env_var('DBT_ENVIRONMENTS') }}_SILVER.SNAPSHOTS.SNP_PLANT_SHOP__PRODUCTS 
-      SET updated_at = '2022-08-01T10:52:49.903000+02:00' 
-      WHERE updated_at = '2022-08-01T00:52:49.903000+02:00';"
+        "update ALUMNO18_FP_PRO_SILVER.SNAPSHOTS.SNP_PLANT_SHOP__PRODUCTS
+        set updated_at = dateadd(hour, 4, updated_at)
+        where extract(hour from updated_at) < 3;"
     ]
   )
 }}
