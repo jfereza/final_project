@@ -1,6 +1,11 @@
 {{
   config(
-    materialized='table'
+    materialized='table',
+    pre_hook=[
+        "update ALUMNO18_FP_PRO_SILVER.SNAPSHOTS.SNP_PLANT_SHOP__USERS
+        set updated_at = dateadd(hour, 4, updated_at)
+        where extract(hour from updated_at) < 3;"
+    ]
   )
 }}
 
